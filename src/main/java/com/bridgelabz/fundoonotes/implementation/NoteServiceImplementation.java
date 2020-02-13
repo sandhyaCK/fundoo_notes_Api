@@ -7,11 +7,12 @@ import javax.persistence.PersistenceContext;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import com.bridgelabz.fundoonotes.model.NoteData;
 import com.bridgelabz.fundoonotes.repository.NoteRepository;
-
-public class NoteImplementation  implements NoteRepository{
+@Repository
+public  class NoteServiceImplementation  implements {
 @PersistenceContext
 EntityManager entityManger;
 
@@ -53,27 +54,42 @@ EntityManager entityManger;
 	}
 
 	
-	public List<NoteData> getTrashedNotes(Long userid) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<NoteData> restoreNote(Long userId) {
+		Session session = entityManger.unwrap(Session.class);
+		Query q =  session.createQuery("from NoteData where userId='" + userId + "'"
+				+ "and isTrashed = true");
+		List<NoteData> list=q.getResultList();
+		return list;
+		
 	}
 
 	
-	public List<NoteData> getArchievedNotes(Long userid) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<NoteData> getArchievedNotes(Long userId) {
+		Session session = entityManger.unwrap(Session.class);
+	 Query q = session.createQuery("from NoteData where userId='" + userId + "'"
+				+ "and isArchieved= true");
+	List<NoteData> list=q.getResultList();
+	return list;
 	}
 
 	
-	public boolean updateColor(Long id, Long userid, String color) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean updateColor(Long id, Long userId, String color) {
+		Session session = entityManger.unwrap(Session.class);
+		 Query q = session.createQuery("update NoteDate set color =:color"+"and isPinned= true");
+		int res = q.executeUpdate();
+		 if(res>=1) {
+			 return true; 
+		 }
+		 return false;
 	}
 
 	
-	public List<NoteData> getPinnededNotes(Long userid) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<NoteData> getPinnededNotes(Long userId) {
+		Session session = entityManger.unwrap(Session.class);
+		 Query q = session.createQuery("from NoteData where userId='" + userId + "'"
+					+ "and isPinned= true");
+		List<NoteData> list=q.getResultList();
+		return list;
 	}
 
 }

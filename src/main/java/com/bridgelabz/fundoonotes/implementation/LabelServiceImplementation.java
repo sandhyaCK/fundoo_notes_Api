@@ -15,6 +15,7 @@ import com.bridgelabz.fundoonotes.model.LabelData;
 import com.bridgelabz.fundoonotes.model.NoteData;
 import com.bridgelabz.fundoonotes.model.UserInformation;
 import com.bridgelabz.fundoonotes.repository.LabelRepository;
+import com.bridgelabz.fundoonotes.repository.NoteRepository;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.service.LabelService;
 import com.bridgelabz.fundoonotes.utility.JwtGenerator;
@@ -32,7 +33,8 @@ public class LabelServiceImplementation implements LabelService{
 	private ModelMapper modelMapper;
 	@Autowired
 	private LabelData labelData;
-	
+	@Autowired
+	NoteRepository noteRepo;
 	@Override
 	@Transactional
 	public void createLabel(LabelDto labelDto, String token) {
@@ -66,9 +68,18 @@ if(user!=null) {
 			throw new UserException("user doesn't exist with id");
 		}
 		UserInformation user = Repository.findUserById(id);
-		if(user!=null) {
-			 labelData = LabelRepo.
-			 
+		BeanUtils.copyProperties(labelDto, LabelData.class);
+		labelData.setUserId(user.getUserId());
+		LabelRepo.save(labelData);
+		NoteData note = noteRepo.findById(noteId);
+		note.getList().add(labelData);
+		noteRepo.save(note);
+	} else {
+		throw new UserException("label with that name is already present ");
+	}
+} else {
+	throw new UserException("note does not exist with userid");
+}
 	}
 	}
 
