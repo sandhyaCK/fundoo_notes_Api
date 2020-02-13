@@ -1,95 +1,92 @@
 package com.bridgelabz.fundoonotes.implementation;
+import java.util.*;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import org.hibernate.Session;
-import org.hibernate.query.Query;
-import org.springframework.stereotype.Repository;
-
+import com.bridgelabz.fundoonotes.dto.NoteDto;
+import com.bridgelabz.fundoonotes.dto.ReminderDto;
 import com.bridgelabz.fundoonotes.model.NoteData;
-import com.bridgelabz.fundoonotes.repository.NoteRepository;
-@Repository
-public  class NoteServiceImplementation  implements {
-@PersistenceContext
-EntityManager entityManger;
+import com.bridgelabz.fundoonotes.service.NoteService;
+import com.bridgelabz.fundoonotes.dto.NoteUpdate;
+import com.bridgelabz.fundoonotes.dto.ReminderDto;
 
-	public NoteData save(NoteData noteInformation) {
-		Session session = entityManger.unwrap(Session.class);
-		session.save(noteInformation);
-		return noteInformation;
-		
-	}
-	public NoteData findById(Long id) {
-		Session session = entityManger.unwrap(Session.class);
-		Query q = session.createQuery("FROM NoteData where id=:id");
-		q.setParameter("id", id);
-		return (NoteData) q.uniqueResult();
+public class NoteServiceImplementation implements NoteService {
+
+	@Override
+	public void createNote(NoteDto information, String token) {
+		// TODO Auto-generated method stub
 		
 	}
 
-	
-	public boolean deleteNote(Long id, Long userid) {
-		Session session = entityManger.unwrap(Session.class);
-		Query q = session.createQuery(" delete FROM NoteData " +"where id=:id");
-		q.setParameter("id", id);
-		int result = q.executeUpdate();
-		if(result>=1) {
-			return true;
-			}
+	@Override
+	public void updateNote (NoteUpdate information, String token) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteNote(Long id, String token) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void archieveNote(Long id, String token) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pinNote(Long id, String token) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean deleteNotePermanently(Long id, String token) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
+	@Override
+	public List<NoteData> getAllNotes(String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-	public List<NoteData> getNotes(Long userId) {
-		Session session = entityManger.unwrap(Session.class);
-		Query q =  session.createQuery("from NoteData where userId='" + userId + "'"
-				+ "and is_trashed=false and is_archieved=false ORDER BY id DESC");
-		List<NoteData> list=q.getResultList();
+	@Override
+	public List<NoteData> gettrashednotes(String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<NoteData> getarchieved(String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addColour(Long noteId, String token, String colour) {
+		// TODO Auto-generated method stub
 		
-		return list;
-
 	}
 
-	
-	public List<NoteData> restoreNote(Long userId) {
-		Session session = entityManger.unwrap(Session.class);
-		Query q =  session.createQuery("from NoteData where userId='" + userId + "'"
-				+ "and isTrashed = true");
-		List<NoteData> list=q.getResultList();
-		return list;
+	@Override
+	public List<NoteData> getPinneded(String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addReminder(Long id, String token, ReminderDto reminder) {
+		// TODO Auto-generated method stub
 		
 	}
 
-	
-	public List<NoteData> getArchievedNotes(Long userId) {
-		Session session = entityManger.unwrap(Session.class);
-	 Query q = session.createQuery("from NoteData where userId='" + userId + "'"
-				+ "and isArchieved= true");
-	List<NoteData> list=q.getResultList();
-	return list;
-	}
 
-	
-	public boolean updateColor(Long id, Long userId, String color) {
-		Session session = entityManger.unwrap(Session.class);
-		 Query q = session.createQuery("update NoteDate set color =:color"+"and isPinned= true");
-		int res = q.executeUpdate();
-		 if(res>=1) {
-			 return true; 
-		 }
-		 return false;
-	}
-
-	
-	public List<NoteData> getPinnededNotes(Long userId) {
-		Session session = entityManger.unwrap(Session.class);
-		 Query q = session.createQuery("from NoteData where userId='" + userId + "'"
-					+ "and isPinned= true");
-		List<NoteData> list=q.getResultList();
-		return list;
+	@Override
+	public void removeReminder(Long noteid, String token, ReminderDto remainder) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
