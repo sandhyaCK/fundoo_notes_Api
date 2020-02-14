@@ -71,7 +71,7 @@ public class UserController {
 		}
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("not verified", 400, token));
 	}
-/*api for reset the forget */
+/*api for reset the forget password*/
 	@PostMapping("user/forgetPassword")
 	public ResponseEntity<Response> forgetPassword(@RequestParam("Email") String Email) {
 		System.out.println(Email);
