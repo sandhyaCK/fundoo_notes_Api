@@ -1,4 +1,4 @@
-/* author:Sandhya.C*/
+/* author:Sandhya*/
 package com.bridgelabz.fundoonotes.controller;
 
 import java.net.http.HttpRequest;
@@ -84,7 +84,7 @@ public class UserController {
 				.body(new Response("User doesnt exist with given mail id", 200, Email));
 
 	}
-/* api for update the user information for the specific token*/
+/* api for update  user information for the specific token*/
 	@PutMapping("user/update{token}")
 	public ResponseEntity<Response> update(@PathVariable("token") String token,
 			@RequestBody PasswordUpdate passwordUpdate) {
