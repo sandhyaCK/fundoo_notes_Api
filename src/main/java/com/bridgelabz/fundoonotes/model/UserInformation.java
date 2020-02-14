@@ -1,19 +1,23 @@
 package com.bridgelabz.fundoonotes.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "User")
+@Table(name = "UserData")
 public class UserInformation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +35,12 @@ public class UserInformation {
 	private Boolean IsVerified;
 	@Column
 	private LocalDateTime dateTime;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	
+	@JoinColumn(name = "userId")
+	
+	//private List<NoteData> note;
 
 	public Long getUserId() {
 		return userId;
@@ -87,5 +97,13 @@ public class UserInformation {
 	public void setDateTime(LocalDateTime dateTime) {
 		this.dateTime = dateTime;
 	}
+
+//	public List<NoteData> getNote() {
+//		return note;
+//	}
+//
+//	public void setNote(List<NoteData> note) {
+//		this.note = note;
+//	}
 
 }

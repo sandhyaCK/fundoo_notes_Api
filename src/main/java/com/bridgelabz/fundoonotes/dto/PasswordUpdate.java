@@ -2,7 +2,7 @@ package com.bridgelabz.fundoonotes.dto;
 
 import lombok.Data;
 
-
+@Data
 public class PasswordUpdate {
 String Email;
 String NewPassword;
