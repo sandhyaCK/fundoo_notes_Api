@@ -9,7 +9,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.bridgelabz.fundoonotes.dto.DtoData;
 import com.bridgelabz.fundoonotes.dto.LoginInfo;
 import com.bridgelabz.fundoonotes.dto.PasswordUpdate;
@@ -37,27 +36,35 @@ public class ServiceImpl implements Services {
 	private MailObject mailObject;
 	@Autowired
 	private UserRepository repository;
-//@Autowired
+@Autowired
 private MailServiceProvider mail;
 
-	//@Transactional
+	@Transactional
 	@Override
 	public Boolean register(DtoData information) {
-
-		UserInformation user = repository.getUser(information.getEmaill());
+System.out.println("######");
+		UserInformation user = repository.getUser(information.getEmail());
+		System.out.println(information.getEmail());
+		System.out.println(information.getPassword());
 		if (user == null) {
 			userInformation = modelMapper.map(information, UserInformation.class);
 			userInformation.setDateTime(LocalDateTime.now());
+			userInformation.setEmail(information.getEmail());
+			userInformation.setName(information.getName());
+			
+			userInformation.setMobileNumber(information.getMobileNumber());
+			System.out.println(information.getPassword());
 			String epassword = encryption.encode(information.getPassword());
 			userInformation.setPassword(epassword);
 			userInformation.setIsVerified(false);
-			String mailResponse = response.fromMessage("http:/localhost:8080/verify",
+			repository.save(userInformation);
+			String mailResponse = response.fromMessage("http://localhost:8081/verify",
 					generate.jwtToken(userInformation.getUserId()));
-			mailObject.setEmail(information.getEmaill());
+			mailObject.setEmail(information.getEmail());
 			mailObject.setMessage(mailResponse);
 			mailObject.setSubject("verified");
 			MailServiceProvider.sendEmail(mailObject.getEmail(), mailObject.getSubject(), mailObject.getMessage());
-
+			System.out.println("######");
 			return true;
 		}
 		throw new UserException("user already exist");
@@ -67,7 +74,7 @@ private MailServiceProvider mail;
 	@Transactional
 	@Override
 	public UserInformation login(LoginInfo information) {
-		UserInformation user = repository.getUser(information.getUserName());
+		UserInformation user = repository.getUser(information.getEmail());
 		if (user != null) {
 			if ((user.getIsVerified() == true) && (encryption.matches(information.getPassword(), user.getPassword()))) {
 				System.out.println(generate.jwtToken(user.getUserId()));
@@ -75,7 +82,7 @@ private MailServiceProvider mail;
 			} else {
 				String mailResponse = response.fromMessage("http://localhost:8080/verify",
 						generate.jwtToken(user.getUserId()));
-				MailServiceProvider.sendEmail(information.getUserName(), "verification", mailResponse);
+				MailServiceProvider.sendEmail(information.getEmail(), "verification", mailResponse);
 				return null;
 
 			}

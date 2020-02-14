@@ -17,77 +17,77 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "Users")
+@Table(name = "User")
 public class UserInformation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long userId;
 	@Column
-	private String Name;
+	private String name;
 	@Column
-	private String Email;
+	private String email;
 	@Column
-	private String Password;
+	private String password;
 	@Column
-	private String MobileNumber;
+	private String mobileNumber;
 	@Column
-	private Boolean IsVerified;
+	private Boolean isVerified;
 	@Column
 	private LocalDateTime dateTime;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	
+
 	@JoinColumn(name = "userId")
-	
-	//private List<NoteData> note;
+
+	// private List<NoteData> note;
 
 	public Long getUserId() {
 		return userId;
 	}
 
 	public void setUserId(Long userId) {
-		userId = userId;
+		this.userId = userId;
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public String getEmail() {
-		return Email;
+		return email;
 	}
 
 	public void setEmail(String email) {
-		Email = email;
+		this.email = email;
 	}
 
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 
 	public void setPassword(String password) {
-		Password = password;
+		this.password = password;
 	}
 
 	public String getMobileNumber() {
-		return MobileNumber;
+		return mobileNumber;
 	}
 
 	public void setMobileNumber(String mobileNumber) {
-		MobileNumber = mobileNumber;
+		this.mobileNumber = mobileNumber;
 	}
 
 	public Boolean getIsVerified() {
-		return IsVerified;
+		return isVerified;
 	}
 
 	public void setIsVerified(Boolean isVerified) {
-		IsVerified = isVerified;
+		this.isVerified = isVerified;
 	}
 
 	public LocalDateTime getDateTime() {

@@ -4,13 +4,14 @@ import lombok.Data;
 
 @Data
 public class LoginInfo {
-String UserName;
+String Email;
 String Password;
-public String getUserName() {
-	return UserName;
+
+public String getEmail() {
+	return Email;
 }
-public void setUserName(String userName) {
-	UserName = userName;
+public void setEmail(String email) {
+	Email = email;
 }
 public String getPassword() {
 	return Password;

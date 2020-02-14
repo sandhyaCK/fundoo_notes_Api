@@ -15,7 +15,7 @@ public class SwaggerConfig {
 	public Docket api() {                
 	    return new Docket(DocumentationType.SWAGGER_2)          
 	      .select()                                       
-	      .apis(RequestHandlerSelectors.basePackage("org.baeldung.web.controller"))
+	      .apis(RequestHandlerSelectors.basePackage("com.bridgelabz.fundoonotes.controller"))
 	      .paths(PathSelectors.any())                     
 	      .build();
 	}

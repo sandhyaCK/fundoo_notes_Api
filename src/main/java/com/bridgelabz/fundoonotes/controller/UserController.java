@@ -40,6 +40,7 @@ public class UserController {
 /* Api for User registration*/
 	@PostMapping("user/Registration")
 	public ResponseEntity<Response> registration(@RequestBody DtoData information) throws Exception {
+		System.out.println(information.getEmail());
 		boolean reg = service.register(information);
 		if (reg) {
 			return ResponseEntity.status(HttpStatus.CREATED)
