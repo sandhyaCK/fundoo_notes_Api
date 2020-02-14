@@ -62,7 +62,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UserDetail("Login failed", 400, information));
 
 	}
-/*api for  the token generated for the email*/
+/*api for verifiying the token generated for the email*/
 	@GetMapping("/verify{token}")
 	public ResponseEntity<Response> verify(@PathVariable("token") String token) throws Exception {
 		boolean verification = service.verify(token);
