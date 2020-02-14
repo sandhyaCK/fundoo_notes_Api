@@ -40,7 +40,7 @@ public class ServiceImpl implements Services {
 //@Autowired
 private MailServiceProvider mail;
 
-	@Transactional
+	//@Transactional
 	@Override
 	public Boolean register(DtoData information) {
 

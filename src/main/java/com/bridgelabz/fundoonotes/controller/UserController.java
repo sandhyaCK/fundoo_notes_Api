@@ -37,7 +37,7 @@ public class UserController {
 	private Services service;
 	@Autowired
 	private JwtGenerator generator;
-
+/* Api for User registration*/
 	@PostMapping("user/Registration")
 	public ResponseEntity<Response> registration(@RequestBody DtoData information) throws Exception {
 		boolean reg = service.register(information);
@@ -48,7 +48,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.ALREADY_REPORTED)
 				.body(new Response("Already existing user", 400, information));
 	}
-
+/* api for user login  */
 	@PostMapping("user/Login")
 	public ResponseEntity<UserDetail> Login(@RequestBody LoginInfo information) {
 		UserInformation user = service.login(information);
@@ -60,7 +60,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UserDetail("Login failed", 400, information));
 
 	}
-
+/**/
 	@GetMapping("/verify{token}")
 	public ResponseEntity<Response> verify(@PathVariable("token") String token) throws Exception {
 		boolean verification = service.verify(token);
