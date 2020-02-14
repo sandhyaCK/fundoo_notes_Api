@@ -1,3 +1,4 @@
+/* author:Sandhya.C*/
 package com.bridgelabz.fundoonotes.controller;
 
 import java.net.http.HttpRequest;
@@ -61,7 +62,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UserDetail("Login failed", 400, information));
 
 	}
-/**/
+/*api for verifiying the token generated for the email*/
 	@GetMapping("/verify{token}")
 	public ResponseEntity<Response> verify(@PathVariable("token") String token) throws Exception {
 		boolean verification = service.verify(token);
@@ -70,7 +71,7 @@ public class UserController {
 		}
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("not verified", 400, token));
 	}
-
+/*api for reset the forget */
 	@PostMapping("user/forgetPassword")
 	public ResponseEntity<Response> forgetPassword(@RequestParam("Email") String Email) {
 		System.out.println(Email);
@@ -83,7 +84,7 @@ public class UserController {
 				.body(new Response("User doesnt exist with given mail id", 200, Email));
 
 	}
-
+/* api for update the user information for the specific token*/
 	@PutMapping("user/update{token}")
 	public ResponseEntity<Response> update(@PathVariable("token") String token,
 			@RequestBody PasswordUpdate passwordUpdate) {
@@ -95,13 +96,13 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("password doesn't matched", 402, token));
 
 	}
-
+/*api for retreiving the  all the user information*/
 	@GetMapping("user/allUsers")
 	public ResponseEntity<Response> getAllUsers(@RequestBody UserInformation user) {
 		List<UserInformation> users = service.getUsers();
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("Listed all user information", 200, user));
 	}
-
+/*api to get the single user information */
 	@GetMapping("user/singleUser")
 	public ResponseEntity<Response> singleUser(@RequestHeader("token") String token) throws Exception {
 		UserInformation user = service.getSingleUser(token);
