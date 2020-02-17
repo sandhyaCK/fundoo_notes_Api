@@ -19,7 +19,7 @@ import com.bridgelabz.fundoonotes.model.UserInformation;
 @Repository
 public class UserRepoImpl implements UserRepository {
 
-	@PersistenceContext
+//	@PersistenceContext
 	private EntityManager entityManger;
 
 	@Override
