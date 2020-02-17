@@ -13,6 +13,12 @@ public class Response {
 		this.obj = obj;
 	}
 
+	public Response(String message, int statusCode) {
+	this.Message=message;
+	this.StatusCode=statusCode;
+	}
+	
+
 	private String Message;
 	private int StatusCode;
 	private Object obj;

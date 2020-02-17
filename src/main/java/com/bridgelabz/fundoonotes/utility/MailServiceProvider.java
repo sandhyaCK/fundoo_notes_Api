@@ -1,4 +1,5 @@
 package com.bridgelabz.fundoonotes.utility;
+
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -14,23 +15,22 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class MailServiceProvider {
 	@Autowired
-private JavaMailSender javaMailSender;
+	private JavaMailSender javaMailSender;
 
 	public static void sendEmail(String toEmail, String subject, String body) {
-		GmailData gmail = new GmailData();
-		String fromEmail = gmail.getEmail();
-		String password = gmail.getPassword();
+
+		String fromEmail = System.getenv("email");
+		String password = System.getenv("password");
 		Properties prop = new Properties();
 		prop.put("mail.smtp.auth", "true");
 		prop.put("mail.smtp.starttls.enable", "true");
 		prop.put("mail.smtp.host", "smtp.gmail.com");
 		prop.put("mail.smtp.port", "587");
 		Authenticator auth = new Authenticator() {
-			
+
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(fromEmail, password);
 			}
@@ -52,5 +52,4 @@ private JavaMailSender javaMailSender;
 			System.out.println("exception occured while sending mail");
 		}
 	}
-		 }
-
+}

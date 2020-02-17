@@ -10,8 +10,9 @@ UserInformation save(UserInformation information);
 UserInformation findUserById(long id);
 UserInformation getUser(String Email);
 boolean update(PasswordUpdate information ,long id);
-boolean verify(long id);
+//boolean verify(long id);
 List<UserInformation> getUsers();
+boolean verify(Long id);
 
 
 }

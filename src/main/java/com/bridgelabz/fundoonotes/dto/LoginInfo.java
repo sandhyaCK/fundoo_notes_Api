@@ -4,20 +4,20 @@ import lombok.Data;
 
 @Data
 public class LoginInfo {
-String Email;
-String Password;
+String email;
+String password;
 
 public String getEmail() {
-	return Email;
+	return email;
 }
 public void setEmail(String email) {
-	Email = email;
+	this.email = email;
 }
 public String getPassword() {
-	return Password;
+	return password;
 }
 public void setPassword(String password) {
-	Password = password;
+	this.password = password;
 }
 
 }

@@ -19,7 +19,7 @@ import com.bridgelabz.fundoonotes.model.UserInformation;
 @Repository
 public class UserRepoImpl implements UserRepository {
 
-	@Autowired
+	@PersistenceContext
 	private EntityManager entityManger;
 
 	@Override
@@ -39,10 +39,10 @@ public class UserRepoImpl implements UserRepository {
 	}
 
 	@Override
-	public UserInformation getUser(String Email) {
+	public UserInformation getUser(String email) {
 		Session session=entityManger.unwrap(Session.class);
-		Query q = session.createQuery("FROM UserInformation where Email=:Email");
-		q.setParameter("Email", Email);
+		Query q = session.createQuery("FROM UserInformation where email=:email");
+		q.setParameter("email", email);
 		
 		return (UserInformation)q.uniqueResult();
 	}
@@ -50,7 +50,7 @@ public class UserRepoImpl implements UserRepository {
 	@Override
 	public boolean update(PasswordUpdate information, long id) {
 		Session session = entityManger.unwrap(Session.class);
-		Query q =  session.createQuery("update UserInformation set Password=:p" +" "+" where id=:id" );
+		Query q =  session.createQuery("update UserInformation set password=:p" +" "+" where id=:id" );
 		q.setParameter(" p",information.getConfirmPassword());
 		q.setParameter("id", id);
 		int status=q.executeUpdate();
@@ -61,17 +61,19 @@ public class UserRepoImpl implements UserRepository {
 	}
 }
 	@Override
-	public boolean verify(long id) {
-		Session session =entityManger.unwrap(Session.class);
-		Query q = session.createQuery("update UserInformation set Password=:p\" +\" \"+\" where id=:id");
-		q.setParameter("p",true);
-		q.setParameter("id", id);
-		int status =q.executeUpdate();
-if(status<0) {
-	return true;
-}
-	else 
-		return false;
+	public boolean verify(Long id) {
+		Session session = entityManger.unwrap(Session.class);
+		Query q = session.createQuery("update UserInformation set is_verified =:p" + " " + " " + " where user_id=:i");
+		q.setParameter("p", true);
+		q.setParameter("i", id);
+		int status = q.executeUpdate();
+		if (status > 0) {
+			return true;
+
+		} else {
+			return false;
+		}
+
 	}
 
 	@Override

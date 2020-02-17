@@ -36,35 +36,41 @@ public class ServiceImpl implements Services {
 	private MailObject mailObject;
 	@Autowired
 	private UserRepository repository;
-@Autowired
-private MailServiceProvider mail;
+	@Autowired
+	private MailServiceProvider mail;
 
 	@Transactional
 	@Override
 	public Boolean register(DtoData information) {
-System.out.println("######");
+		System.out.println("######");
 		UserInformation user = repository.getUser(information.getEmail());
 		System.out.println(information.getEmail());
 		System.out.println(information.getPassword());
+
 		if (user == null) {
 			userInformation = modelMapper.map(information, UserInformation.class);
 			userInformation.setDateTime(LocalDateTime.now());
-			userInformation.setEmail(information.getEmail());
-			userInformation.setName(information.getName());
-			
-			userInformation.setMobileNumber(information.getMobileNumber());
+			/*
+			 * userInformation.setEmail(information.getEmail());
+			 * userInformation.setName(information.getName());
+			 * 
+			 * userInformation.setMobileNumber(information.getMobileNumber());
+			 */
 			System.out.println(information.getPassword());
 			String epassword = encryption.encode(information.getPassword());
 			userInformation.setPassword(epassword);
-			userInformation.setIsVerified(false);
+			userInformation.setIsVerified(0);
 			repository.save(userInformation);
 			String mailResponse = response.fromMessage("http://localhost:8081/verify",
 					generate.jwtToken(userInformation.getUserId()));
 			mailObject.setEmail(information.getEmail());
 			mailObject.setMessage(mailResponse);
 			mailObject.setSubject("verified");
+
 			MailServiceProvider.sendEmail(mailObject.getEmail(), mailObject.getSubject(), mailObject.getMessage());
+
 			System.out.println("######");
+			System.out.println(generate.jwtToken(userInformation.getUserId()));
 			return true;
 		}
 		throw new UserException("user already exist");
@@ -76,7 +82,7 @@ System.out.println("######");
 	public UserInformation login(LoginInfo information) {
 		UserInformation user = repository.getUser(information.getEmail());
 		if (user != null) {
-			if ((user.getIsVerified() == true) && (encryption.matches(information.getPassword(), user.getPassword()))) {
+			if ((user.getIsVerified() == 1) && (encryption.matches(information.getPassword(), user.getPassword()))) {
 				System.out.println(generate.jwtToken(user.getUserId()));
 				return user;
 			} else {
@@ -100,7 +106,7 @@ System.out.println("######");
 	@Override
 	public Boolean verify(String token) {
 		System.out.println("id is in verification" + (Long) generate.parseJWT(token));
-		Long id = (long) generate.parseJWT(token);
+		Long id = (Long) generate.parseJWT(token);
 		repository.verify(id);
 		return true;
 	}
@@ -110,10 +116,11 @@ System.out.println("######");
 	public Boolean isUserExist(String Email) {
 		try {
 			UserInformation user = repository.getUser(Email);
-			if (user.getIsVerified() == true) {
+			if (user.getIsVerified() == 1) {
 				String mailResposne = response.fromMessage("http://localhost:8080/verify",
 						generate.jwtToken(user.getUserId()));
 				MailServiceProvider.sendEmail(user.getEmail(), "verification", mailResposne);
+				repository.save(user);
 				return true;
 			} else {
 				return false;

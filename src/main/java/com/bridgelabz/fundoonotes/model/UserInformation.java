@@ -32,7 +32,7 @@ public class UserInformation {
 	@Column
 	private String mobileNumber;
 	@Column
-	private Boolean isVerified;
+	private int isVerified;
 	@Column
 	private LocalDateTime dateTime;
 
@@ -40,7 +40,7 @@ public class UserInformation {
 
 	@JoinColumn(name = "userId")
 
-	// private List<NoteData> note;
+	 private List<NoteData> note;
 
 	public Long getUserId() {
 		return userId;
@@ -82,11 +82,11 @@ public class UserInformation {
 		this.mobileNumber = mobileNumber;
 	}
 
-	public Boolean getIsVerified() {
+	public int getIsVerified() {
 		return isVerified;
 	}
 
-	public void setIsVerified(Boolean isVerified) {
+	public void setIsVerified(int isVerified) {
 		this.isVerified = isVerified;
 	}
 
@@ -98,12 +98,12 @@ public class UserInformation {
 		this.dateTime = dateTime;
 	}
 
-//	public List<NoteData> getNote() {
-//		return note;
-//	}
-//
-//	public void setNote(List<NoteData> note) {
-//		this.note = note;
-//	}
+public List<NoteData> getNote() {
+		return note;
+	}
+
+	public void setNote(List<NoteData> note) {
+		this.note = note;
+	}
 
 }

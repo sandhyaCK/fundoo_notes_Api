@@ -63,7 +63,7 @@ public class UserController {
 
 	}
 /*api for verifiying the token generated for the email*/
-	@GetMapping("/verify{token}")
+	@GetMapping("/verify/{token}")
 	public ResponseEntity<Response> verify(@PathVariable("token") String token) throws Exception {
 		boolean verification = service.verify(token);
 		if (verification) {
