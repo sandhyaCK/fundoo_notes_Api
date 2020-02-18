@@ -42,10 +42,10 @@ private NoteRepository noterepo;
 		userData = repository.findUserById(id);
 		if(userData!=null) {
 			noteData.setCreatedDateAndTime(LocalDateTime.now());
-			noteData.setArchieved(false);
+			noteData.setArchieved(0);
 			noteData.setColour("white");
-			noteData.setPinned(false);
-			noteData.setTrashed(false);
+			noteData.setPinned(0);
+			noteData.setTrashed(0);
 			noteData.setReminder(null);
 			noteData.setDescription(information.getDescription());
 			noteData.setTitle(information.getTitle());
@@ -93,7 +93,7 @@ private NoteRepository noterepo;
 		userData = repository.findUserById(userid);
 		NoteData noteData = noterepo.findById(id);
 		if(noteData!=null) {
-			noteData.setTrashed(!noteData.isTrashed());
+			noteData.setTrashed(1);
 			
 			noterepo.save(noteData);
 		}
@@ -112,8 +112,8 @@ private NoteRepository noterepo;
 	userData = repository.findUserById(userid);
 	NoteData noteData = noterepo.findById(id);
 	if(noteData!=null) {
-		noteData.setPinned(false);
-		noteData.setArchieved(!noteData.isArchieved());
+		noteData.setPinned(0);
+		noteData.setArchieved(1);
 		noteData.setUpDateAndTime(LocalDateTime.now());
 		noterepo.save(noteData);
 	}
@@ -132,8 +132,8 @@ private NoteRepository noterepo;
 		userData = repository.findUserById(userid);
 		NoteData noteData = noterepo.findById(id);
 		if(noteData!=null) {
-			noteData.setArchieved(false);
-			noteData.setPinned(!noteData.isPinned());
+			noteData.setArchieved(0);
+			noteData.setPinned(1);
 			noteData.setUpDateAndTime(LocalDateTime.now());
 			noterepo.save(noteData);
 	}

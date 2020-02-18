@@ -1,7 +1,5 @@
 package com.bridgelabz.fundoonotes.response;
 
-import org.springframework.stereotype.Component;
-
 import lombok.Data;
 
 @Data

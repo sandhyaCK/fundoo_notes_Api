@@ -10,8 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -41,6 +45,11 @@ public class UserInformation {
 	@JoinColumn(name = "userId")
 
 	 private List<NoteData> note;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "collaborator_note", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "note_id") })
+	@JsonIgnore
+	private List<NoteData> collabrateNote;
 
 	public Long getUserId() {
 		return userId;
@@ -104,6 +113,14 @@ public List<NoteData> getNote() {
 
 	public void setNote(List<NoteData> note) {
 		this.note = note;
+	}
+
+	public List<NoteData> getCollabrateNote() {
+		return collabrateNote;
+	}
+
+	public void setColabrateNote(List<NoteData> collabrateNote) {
+		this.collabrateNote = collabrateNote;
 	}
 
 }

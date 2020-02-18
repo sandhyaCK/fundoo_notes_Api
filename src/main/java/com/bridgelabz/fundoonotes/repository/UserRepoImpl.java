@@ -6,16 +6,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.query.Query;
-
-
-
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.bridgelabz.fundoonotes.dto.DtoData;
 import com.bridgelabz.fundoonotes.dto.PasswordUpdate;
 import com.bridgelabz.fundoonotes.model.UserInformation;
+
 @Repository
 public class UserRepoImpl implements UserRepository {
 
@@ -24,42 +19,42 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public UserInformation save(UserInformation information) {
-		Session session=entityManger.unwrap(Session.class);
-		 session.saveOrUpdate(information);
+		Session session = entityManger.unwrap(Session.class);
+		session.saveOrUpdate(information);
 		return information;
 	}
 
 	@Override
-	
 	public UserInformation findUserById(long id) {
-		Session session=entityManger.unwrap(Session.class);
+		Session session = entityManger.unwrap(Session.class);
 		Query q = session.createQuery("FROM UserInformation where id=:id");
-		q.setParameter("id",id );
-		return(UserInformation) q.uniqueResult();
+		q.setParameter("id", id);
+		return (UserInformation) q.uniqueResult();
 	}
 
 	@Override
 	public UserInformation getUser(String email) {
-		Session session=entityManger.unwrap(Session.class);
+		Session session = entityManger.unwrap(Session.class);
 		Query q = session.createQuery("FROM UserInformation where email=:email");
 		q.setParameter("email", email);
-		
-		return (UserInformation)q.uniqueResult();
+
+		return (UserInformation) q.uniqueResult();
 	}
 
 	@Override
 	public boolean update(PasswordUpdate information, long id) {
 		Session session = entityManger.unwrap(Session.class);
-		Query q =  session.createQuery("update UserInformation set password=:p" +" "+" where id=:id" );
-		q.setParameter(" p",information.getConfirmPassword());
+		Query q = session.createQuery("update UserInformation set password=:p" + " " + " where id=:id");
+		q.setParameter(" p", information.getConfirmPassword());
 		q.setParameter("id", id);
-		int status=q.executeUpdate();
-		if(status>0) {
+		int status = q.executeUpdate();
+		if (status > 0) {
 			return true;
-		}else {
-		return false;
+		} else {
+			return false;
+		}
 	}
-}
+
 	@Override
 	public boolean verify(Long id) {
 		Session session = entityManger.unwrap(Session.class);
@@ -79,10 +74,9 @@ public class UserRepoImpl implements UserRepository {
 	@Override
 	public List<UserInformation> getUsers() {
 		Session session = entityManger.unwrap(Session.class);
-		List<UserInformation> userList = session.createQuery("FROM UserInformation").getResultList();
+		Query<UserInformation> q = session.createQuery("FROM UserInformation");
+	List<UserInformation> userList=	q.getResultList();
 		return userList;
 	}
-	
-
 
 }

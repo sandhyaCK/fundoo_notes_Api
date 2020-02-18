@@ -14,9 +14,9 @@ public class NoteUpdate {
 	private String title;
 	@NotNull
 	private String description;
-	private boolean isArchieved;
-	private boolean isPinned;
-	private boolean isTrashed;
+	private int isArchieved;
+	private int isPinned;
+	private int isTrashed;
 	private LocalDateTime createdDateAndTime;
 	private LocalDateTime upDateAndTime;
 
@@ -44,27 +44,27 @@ public class NoteUpdate {
 		this.description = description;
 	}
 
-	public boolean isArchieved() {
+	public int isArchieved() {
 		return isArchieved;
 	}
 
-	public void setArchieved(boolean isArchieved) {
+	public void setArchieved(int isArchieved) {
 		this.isArchieved = isArchieved;
 	}
 
-	public boolean isPinned() {
+	public int isPinned() {
 		return isPinned;
 	}
 
-	public void setPinned(boolean isPinned) {
+	public void setPinned(int isPinned) {
 		this.isPinned = isPinned;
 	}
 
-	public boolean isTrashed() {
+	public int isTrashed() {
 		return isTrashed;
 	}
 
-	public void setTrashed(boolean isTrashed) {
+	public void setTrashed(int isTrashed) {
 		this.isTrashed = isTrashed;
 	}
 

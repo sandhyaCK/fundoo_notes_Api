@@ -36,8 +36,8 @@ public class ServiceImpl implements Services {
 	private MailObject mailObject;
 	@Autowired
 	private UserRepository repository;
-	@Autowired
-	private MailServiceProvider mail;
+//	@Autowired
+//	private MailServiceProvider mail;
 
 	@Transactional
 	@Override
@@ -113,9 +113,9 @@ public class ServiceImpl implements Services {
 
 	@Transactional
 	@Override
-	public Boolean isUserExist(String Email) {
+	public Boolean isUserExist(String email) {
 		try {
-			UserInformation user = repository.getUser(Email);
+			UserInformation user = repository.getUser(email);
 			if (user.getIsVerified() == 1) {
 				String mailResposne = response.fromMessage("http://localhost:8080/verify",
 						generate.jwtToken(user.getUserId()));
@@ -138,9 +138,13 @@ public class ServiceImpl implements Services {
 			Long id = null;
 			id = (long) generate.parseJWT(token);
 			String epassword = encryption.encode(information.getConfirmPassword());
+			String epassword1 = encryption.encode(information.getNewPassword());
+			if(epassword==epassword1) {
 			information.setConfirmPassword(epassword);
+			}
 			return repository.update(information, id);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new UserException("Invalid data ");
 		}
 
@@ -149,9 +153,8 @@ public class ServiceImpl implements Services {
 	@Transactional
 	@Override
 	public List<UserInformation> getUsers() {
-		List<UserInformation> users = repository.getUsers();
-		UserInformation user = users.get(0);
-
+		List<UserInformation> users =  repository.getUsers();
+		//UserInformation user = users.get(0);
 		return users;
 	}
 
