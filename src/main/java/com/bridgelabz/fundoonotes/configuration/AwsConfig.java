@@ -11,7 +11,7 @@ public class AwsConfig {
 	@Value("${acessKey}")
 	private String acessKey;
 	@Value("${region}")
-//	private String region;
+	private String region;
 
 	@Bean
 	public AmazonS3 amazonS3Client() {
