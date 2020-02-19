@@ -77,7 +77,7 @@ public class ServiceImpl implements Services {
 
 	}
 
-//	@Transactional
+	@Transactional
 	@Override
 	public UserInformation login(LoginInfo information) {
 		UserInformation user = repository.getUser(information.getEmail());
