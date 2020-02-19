@@ -73,7 +73,7 @@ public class ServiceImpl implements Services {
 			System.out.println(generate.jwtToken(userInformation.getUserId()));
 			return true;
 		}
-//		throw new UserException("user already exist");
+		throw new UserException("user already exist");
 
 	}
 
