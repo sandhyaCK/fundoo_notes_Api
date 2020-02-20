@@ -22,19 +22,19 @@ public class NoteRepoImplementation  implements NoteRepository{
 		return noteInformation;
 		
 	}
-	public NoteData findById(Long id) {
+	public NoteData findById(Long noteId) {
 		Session session = entityManger.unwrap(Session.class);
-		Query q = session.createQuery("FROM NoteData where id=:id");
-		q.setParameter("id", id);
+		Query q = session.createQuery("FROM NoteData where noteId=:noteId");
+		q.setParameter("noteId", noteId);
 		return (NoteData) q.uniqueResult();
 		
 	}
 
 	
-	public boolean deleteNote(Long id, Long userid) {
+	public boolean deleteNote(Long noteId, Long userid) {
 		Session session = entityManger.unwrap(Session.class);
-		Query q = session.createQuery(" delete FROM NoteData " +"where id=:id");
-		q.setParameter("id", id);
+		Query q = session.createQuery(" delete FROM NoteData " +"where noteId=:noteId");
+		q.setParameter("noteId", noteId);
 		int result = q.executeUpdate();
 		if(result>=1) {
 			return true;
@@ -45,7 +45,7 @@ public class NoteRepoImplementation  implements NoteRepository{
 
 	public List<NoteData> getNotes(Long userId) {
 		Session session = entityManger.unwrap(Session.class);
-		Query q =  session.createQuery("from NoteData where user_id=:userId "+ "and is_trashed=false and is_archieved=false ");
+		Query q =  session.createQuery("from NoteData where user_id=:userId AND is_trashed=0 AND is_archieved=0 ");
 		List<NoteData> list=q.getResultList();
 		
 		return list;
@@ -55,7 +55,7 @@ public class NoteRepoImplementation  implements NoteRepository{
 	
 	public List<NoteData> restoreNote(Long userId) {
 		Session session = entityManger.unwrap(Session.class);
-		Query q =  session.createQuery("from NoteData where user_id=:userId and isTrashed =true");
+		Query q =  session.createQuery("from NoteData where user_id=:userId AND isTrashed =0");
 		List<NoteData> list=q.getResultList();
 		return list;
 		
@@ -64,15 +64,15 @@ public class NoteRepoImplementation  implements NoteRepository{
 	
 	public List<NoteData> getArchievedNotes(Long userId) {
 		Session session = entityManger.unwrap(Session.class);
-	 Query q = session.createQuery("from NoteData where user_id=: userId "+"and isArchieved= true");
+	 Query q = session.createQuery("from NoteData where userId=:userId AND isArchieved= 0");
 	List<NoteData> list=q.getResultList();
 	return list;
 	}
 
 	
-	public boolean updateColor(Long id, Long userId, String color) {
+	public boolean updateColor(Long noteId, Long userId, String color) {
 		Session session = entityManger.unwrap(Session.class);
-		 Query q = session.createQuery("update NoteDate set color =:color"+ "and isPinned= true");
+		 Query q = session.createQuery("update NoteDate set color =:color AND isPinned= 0");
 		int res = q.executeUpdate();
 		 if(res>=1) {
 			 return true; 
@@ -83,7 +83,7 @@ public class NoteRepoImplementation  implements NoteRepository{
 	
 	public List<NoteData> getPinnededNotes(Long userId) {
 		Session session = entityManger.unwrap(Session.class);
-		 Query q = session.createQuery("from NoteData where user_id=:userId"+"and isPinned= true");
+		 Query q = session.createQuery("from NoteData where user_id=:userId AND isPinned= 0");
 		List<NoteData> list=q.getResultList();
 		return list;
 	}

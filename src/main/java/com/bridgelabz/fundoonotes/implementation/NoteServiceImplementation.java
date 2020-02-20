@@ -173,7 +173,7 @@ return false;
 	public List<NoteData> getAllNotes(String token) {
 		try {
 			Long userid=(Long)generate.parseJWT(token);
-			userData = repository.findUserById(userid);
+		UserInformation	userData1 = repository.findUserById(userid);
 			NoteData noteData = noterepo.findById(userid);
 			if(noteData!=null) {
 					List<NoteData> list =noterepo.getNotes(userid);

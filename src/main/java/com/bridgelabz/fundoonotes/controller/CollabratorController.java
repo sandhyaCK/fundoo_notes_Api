@@ -34,6 +34,6 @@ private CollabratorService service;
 	@DeleteMapping("collabrate/deleteCollabrator")
 	public ResponseEntity<Response> deleteCollabrator(@RequestParam("NoteId") Long NoteId,@RequestParam("email")String email,@RequestHeader("token") String token){
 	NoteData note = service.deleteCollabrator(NoteId, token, email);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("Collabrator added", 200,note));
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("Collabrator removed", 200));
 	}
 }

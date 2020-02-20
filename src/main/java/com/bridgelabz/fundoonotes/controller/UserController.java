@@ -93,13 +93,13 @@ public class UserController {
 	@GetMapping("user/allUsers")
 	public ResponseEntity<Response> getAllUsers(@RequestBody UserInformation user) {
 		List<UserInformation> users = service.getUsers();
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("Listed all user information", 200, user));
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("Listed all user information", 200, users));
 	}
 /*API to get the single user information */
 	@GetMapping("user/singleUser")
 	public ResponseEntity<Response> singleUser(@RequestHeader("token") String token) throws Exception {
 		UserInformation user = service.getSingleUser(token);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("User is", 200, token));
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("User is", 200, user));
 	}
 
 }

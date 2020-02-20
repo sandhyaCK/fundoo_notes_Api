@@ -6,12 +6,13 @@ import com.bridgelabz.fundoonotes.model.UserInformation;
 
 public interface UserRepository {
 UserInformation save(UserInformation information);
-UserInformation findUserById(long id);
+UserInformation findUserById(Long id);
 UserInformation getUser(String Email);
-boolean update(PasswordUpdate information ,long id);
+boolean update(PasswordUpdate information ,Long id);
 //boolean verify(long id);
 List<UserInformation> getUsers();
 boolean verify(Long id);
+
 
 
 }

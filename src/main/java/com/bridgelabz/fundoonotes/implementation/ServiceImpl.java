@@ -97,7 +97,7 @@ public class ServiceImpl implements Services {
 		return null;
 	}
 
-	public String generateToken(long id) {
+	public String generateToken(Long id) {
 		return generate.jwtToken(id);
 
 	}
@@ -136,7 +136,7 @@ public class ServiceImpl implements Services {
 	public Boolean update(PasswordUpdate information, String token) {
 		try {
 			Long id = null;
-			id = (long) generate.parseJWT(token);
+			id = (Long) generate.parseJWT(token);
 			String epassword = encryption.encode(information.getConfirmPassword());
 			String epassword1 = encryption.encode(information.getNewPassword());
 			if(epassword==epassword1) {
@@ -162,7 +162,7 @@ public class ServiceImpl implements Services {
 	@Override
 	public UserInformation getSingleUser(String token) {
 		try {
-			Long id = (long) generate.parseJWT(token);
+			Long id = (Long) generate.parseJWT(token);
 
 			UserInformation user = repository.findUserById(id);
 			return user;

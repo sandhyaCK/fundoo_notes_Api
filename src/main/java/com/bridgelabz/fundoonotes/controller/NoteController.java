@@ -103,7 +103,7 @@ public class NoteController {
 	@GetMapping("/note/getPinned/{id}")
 	public ResponseEntity<Response> getPinned(@RequestHeader("token") String token) {
 		List<NoteData> list = service.getPinneded(token);
-		return ResponseEntity.status(HttpStatus.OK).body(new Response(" trashed notes", 200, list));
+		return ResponseEntity.status(HttpStatus.OK).body(new Response(" pinned notes", 200, list));
 	}
 
 	/* API for adding remainder to Notes */
@@ -111,7 +111,7 @@ public class NoteController {
 	public ResponseEntity<Response> addRemainder(@RequestHeader("token") String token,
 			@RequestParam("noteId") Long noteId, @RequestBody ReminderDto remainder) {
 		service.addReminder(noteId, token, remainder);
-		return ResponseEntity.status(HttpStatus.OK).body(new Response(" trashed notes", 200));
+		return ResponseEntity.status(HttpStatus.OK).body(new Response(" reminderAdded notes", 200));
 	}
 
 	/* API for removing remainder Notes */
