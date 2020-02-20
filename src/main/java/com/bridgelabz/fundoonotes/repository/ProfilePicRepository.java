@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bridgelabz.fundoonotes.model.ProfilePic;
 @Repository
-public interface ProfilePicRepoImple extends JpaRepository<ProfilePic,Long>{
+public interface ProfilePicRepository extends JpaRepository<ProfilePic,Long>{
 
 	@Query(value = "select * from profile_pic where user_id=? ", nativeQuery = true)
 	Profile findUserById(Long userId);
