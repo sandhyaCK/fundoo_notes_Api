@@ -20,7 +20,7 @@ public class ProfilePicRepository {
 		return profile;
 	}
 
-	public boolean deleteProfile(Long id) {
+	///public boolean deleteProfile(Long id) {
 		Session session = entityManager.unwrap(Session.class);
 		Query q = session.createQuery("delete from ProfilePic where userId =:id");
 		q.setParameter("userId", id);
