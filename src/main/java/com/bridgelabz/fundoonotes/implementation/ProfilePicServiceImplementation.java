@@ -45,7 +45,7 @@ public class ProfilePicServiceImplementation implements ProfilePicService {
 
 	@Override
 	public void deleteobjectFromS3Object(String awsFileName, String bucketName) {
-		// TODO Auto-generated method stub
+		//// TODO Auto-generated method stub
 		
 	}
 
