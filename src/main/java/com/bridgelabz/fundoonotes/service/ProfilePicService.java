@@ -4,13 +4,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ProfilePicService {
-	Profile storeObjectInS3(MultipartFile file, String fileName, String contentType, String token);
+	.//Profile uploadFileTos3Bucket(MultipartFile file, String fileName,String bucketName,String token);
 
-	S3Object fetchobject(String awsFileName);
+	S3Object downloadFileFromS3Buckest(String awsFileName,String bucketName);
 
-	void deleteobject(String key);
+	void deleteobjectFromS3Object(String awsFileName,String bucketName);
 
-	Profile update(MultipartFile file, String originalFilename, String contentType, String token);
 
-	S3Object getProfilePic(String token);
 }
