@@ -33,7 +33,7 @@ public class ProfilePicServiceImplementation implements ProfilePicService {
 	@Override
 	public Profile uploadFileTos3Bucket(MultipartFile file, String fileName, String bucketName, String token) {
 		s3client.putObject(new PutObjectRequest(bucketName, fileName, (File) file)
-	  //          .withCannedAcl(CannedAccessControlList.PublicRead));
+	            .withCannedAcl(CannedAccessControlList.PublicRead));
 		return null;
 	}
 
