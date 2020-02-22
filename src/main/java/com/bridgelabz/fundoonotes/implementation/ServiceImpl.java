@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.bridgelabz.fundoonotes.configuration.RabbitMQSender;
 import com.bridgelabz.fundoonotes.dto.DtoData;
 import com.bridgelabz.fundoonotes.dto.LoginInfo;
 import com.bridgelabz.fundoonotes.dto.PasswordUpdate;
@@ -38,6 +40,8 @@ public class ServiceImpl implements Services {
 	private UserRepository repository;
 //	@Autowired
 //	private MailServiceProvider mail;
+	@Autowired
+	RabbitMQSender sender;
 
 	@Transactional
 	@Override
@@ -66,9 +70,10 @@ public class ServiceImpl implements Services {
 			mailObject.setEmail(information.getEmail());
 			mailObject.setMessage(mailResponse);
 			mailObject.setSubject("verified");
+			System.out.println(mailResponse);
 
 			MailServiceProvider.sendEmail(mailObject.getEmail(), mailObject.getSubject(), mailObject.getMessage());
-
+           sender.send(mailObject);
 			System.out.println("######");
 			System.out.println(generate.jwtToken(userInformation.getUserId()));
 			return true;
@@ -85,11 +90,12 @@ public class ServiceImpl implements Services {
 			if ((user.getIsVerified() == 1) && (encryption.matches(information.getPassword(), user.getPassword()))) {
 				System.out.println(generate.jwtToken(user.getUserId()));
 				return user;
-			} else {
-				String mailResponse = response.fromMessage("http://localhost:8080/verify",
-						generate.jwtToken(user.getUserId()));
-				MailServiceProvider.sendEmail(information.getEmail(), "verification", mailResponse);
-				return null;
+//			} else {
+//				String mailResponse = response.fromMessage("http://localhost:8080/verify",
+//						generate.jwtToken(user.getUserId()));
+//				//MailServiceProvider.sendEmail(information.getEmail(), "verification", mailResponse);
+//				sender.send(mailResponse);
+//				return null;
 
 			}
 
@@ -119,7 +125,8 @@ public class ServiceImpl implements Services {
 			if (user.getIsVerified() == 1) {
 				String mailResposne = response.fromMessage("http://localhost:8080/verify",
 						generate.jwtToken(user.getUserId()));
-				MailServiceProvider.sendEmail(user.getEmail(), "verification", mailResposne);
+			//	MailServiceProvider.sendEmail(user.getEmail(), "verification", mailResposne);
+				//sender.Send1(user.getEmail(), "verification", mailResposne);
 				repository.save(user);
 				return true;
 			} else {

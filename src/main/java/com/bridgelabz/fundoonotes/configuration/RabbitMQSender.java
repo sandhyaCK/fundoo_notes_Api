@@ -1,25 +1,26 @@
 package com.bridgelabz.fundoonotes.configuration;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoonotes.response.MailObject;
 
-@Component
-
+@Service
 public class RabbitMQSender {
-	@Autowired
-	private RabbitTemplate rabbitTemplate;
-	
-	@Value("rmq.rube.exchange")
-	private String exchangeName;
 
-	@Value("rube.key")
-	private String routingKey;
+	// @Autowired
+	private AmqpTemplate amqpTemplate;
 
-	public void produceMsg(MailObject message) {
-		rabbitTemplate.convertAndSend(exchangeName, routingKey, message);
+	@Value("${javainuse.rabbitmq.exchange}")
+	private String exchange;
+
+	@Value("${javainuse.rabbitmq.routingkey}")
+	private String routingkey;
+
+	public void send(MailObject mailResponse) {
+		amqpTemplate.convertAndSend(exchange, routingkey, mailResponse);
+		System.out.println("Send msg = " + mailResponse);
+
 	}
-
-	 }
+}
