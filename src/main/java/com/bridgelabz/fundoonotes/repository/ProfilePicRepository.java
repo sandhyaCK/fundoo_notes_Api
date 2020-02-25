@@ -20,23 +20,17 @@ public class ProfilePicRepository {
 		return profile;
 	}
 
-	public boolean deleteProfile(Long id) {
+	public ProfilePic findUserById(Long userId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query q = session.createQuery("delete from ProfilePic where userId =:id");
-		q.setParameter("userId", id);
-		int result = q.executeUpdate();
-		if (result > 0) {
-			return true;
-		}
-		return false;
+		Query q = session.createQuery("from UserInformation where userId=:userId");
+		ProfilePic user = (ProfilePic) q.getSingleResult();
+		return user;
 	}
 
-	public ProfilePic updateProfile(Long id, Long userId) {
+	public ProfilePic delete(ProfilePic profile) {
 		Session session = entityManager.unwrap(Session.class);
-		Query q = session.createQuery("update ProfilePic set id=:id where userId=userId");
-		q.executeUpdate();
+		session.delete(profile);
 		return null;
-
 	}
 
 }

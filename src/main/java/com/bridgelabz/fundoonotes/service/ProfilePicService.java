@@ -1,14 +1,16 @@
 package com.bridgelabz.fundoonotes.service;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bridgelabz.fundoonotes.model.ProfilePic;
+
+
 public interface ProfilePicService {
-	Profile uploadFileTos3Bucket(MultipartFile file, String fileName,String bucketName,String token);
+	
+	public ProfilePic uploadFileTos3Bucket(MultipartFile file, String fileName, String bucketName, String token);
 
-	S3Object downloadFileFromS3Buckest(String awsFileName,String bucketName);
+	public ProfilePic updateProfile(MultipartFile file, String originalFilename, String contentType, String token);
 
-	void deleteobjectFromS3Object(String awsFileName,String bucketName);
-
+	public void deleteobjectFromS3Bucket(String key);
 
 }

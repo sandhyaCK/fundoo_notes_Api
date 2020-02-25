@@ -21,7 +21,12 @@ public class ProfilePic {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private UserInformation userLabel;
+	private UserInformation userLabel;                                                     
+
+	public ProfilePic(String fileName, UserInformation user) {
+		this.profilePicName= fileName;
+		this.userLabel=user;
+	}
 
 	public Long getId() {
 		return id;

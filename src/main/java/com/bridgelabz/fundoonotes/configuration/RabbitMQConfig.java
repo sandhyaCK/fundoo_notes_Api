@@ -1,28 +1,25 @@
 package com.bridgelabz.fundoonotes.configuration;
 
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 @Configuration
-//@EnableRabbit
+@EnableRabbit
 public class RabbitMQConfig {
 
-	@Value("${javainuse.rabbitmq.queue}")
+	@Value("myqueue")
 	String queueName;
 
-	@Value("${javainuse.rabbitmq.exchange}")
+	@Value("exchanger")
 	String exchange;
 
-	@Value("${javainuse.rabbitmq.routingkey}")
+	@Value("key")
 	private String routingkey;
 
 	@Bean
@@ -41,15 +38,9 @@ public class RabbitMQConfig {
 	}
 
 	@Bean
-	public MessageConverter jsonMessageConverter() {
+	public Jackson2JsonMessageConverter jsonMessageConverter() {
 		return new Jackson2JsonMessageConverter();
 	}
 
-	
-	@Bean
-	public AmqpTemplate template(ConnectionFactory connectionFactory) {
-		final RabbitTemplate rabbittemplate = new RabbitTemplate(connectionFactory);
-		rabbittemplate.setMessageConverter(jsonMessageConverter());
-		return rabbittemplate;
-	}
 }
+

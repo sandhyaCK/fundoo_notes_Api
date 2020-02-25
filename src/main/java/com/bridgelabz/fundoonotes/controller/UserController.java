@@ -56,7 +56,7 @@ public class UserController {
 
 	}
 /*API for verifying the token generated for the email*/
-	@GetMapping("/verify/{token}")
+	@PostMapping("/verify/{token}")
 	public ResponseEntity<Response> verify(@PathVariable("token") String token) throws Exception {
 		boolean verification = service.verify(token);
 		if (verification) {
@@ -66,7 +66,7 @@ public class UserController {
 	}
 /*API for reset the forget password*/
 	@PostMapping("user/forgetPassword")
-	public ResponseEntity<Response> forgetPassword(@RequestParam("email") String email) {
+	public ResponseEntity<Response> forgetPassword(@RequestParam("email")  String email) {
 		System.out.println(email);
 		boolean result = service.isUserExist(email);
 		if (result) {
