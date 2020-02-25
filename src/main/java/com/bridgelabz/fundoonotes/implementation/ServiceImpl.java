@@ -24,7 +24,10 @@ import com.bridgelabz.fundoonotes.service.Services;
 import com.bridgelabz.fundoonotes.utility.JwtGenerator;
 import com.bridgelabz.fundoonotes.utility.MailServiceProvider;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ServiceImpl implements Services {
 	private UserInformation userInformation = new UserInformation();
 	@Autowired
@@ -41,9 +44,9 @@ public class ServiceImpl implements Services {
 	private UserRepository repository;
 	@Autowired
 	private MailServiceProvider mail;
-	@Autowired
-	RabbitMQSender sender;
-
+	/*
+	 * @Autowired private RabbitMQSender sender;
+	 */
 	/*
 	 * @Autowired private ElasticSearchRepo elasticrepo;
 	 */
@@ -56,34 +59,22 @@ public class ServiceImpl implements Services {
 	@Override
 	public Boolean register(DtoData information) {
 		System.out.println("######");
-		UserInformation user = repository.getUser(information.getEmail());
-		System.out.println(information.getEmail());
-		System.out.println(information.getPassword());
-
+		UserInformation user = repository.getUser( information.getEmail());
 		if (user == null) {
 			userInformation = modelMapper.map(information, UserInformation.class);
 			userInformation.setDateTime(LocalDateTime.now());
-			/*
-			 * userInformation.setEmail(information.getEmail());
-			 * userInformation.setName(information.getName());
-			 * 
-			 * userInformation.setMobileNumber(information.getMobileNumber());
-			 */
-			System.out.println(information.getPassword());
 			String epassword = encryption.encode(information.getPassword());
 			userInformation.setPassword(epassword);
 			userInformation.setIsVerified(0);
 			repository.save(userInformation);
-			//elasticrepo.save(userInformation);
+			// elasticrepo.save(userInformation);
 			String mailResponse = response.fromMessage("http://localhost:8081/verify",
 					generate.jwtToken(userInformation.getUserId()));
 			mailObject.setEmail(information.getEmail());
 			mailObject.setMessage(mailResponse);
 			mailObject.setSubject("verified");
-			//System.out.println(mailResponse);
-
-		//	MailServiceProvider.sendEmail(mailObject.getEmail(), mailObject.getSubject(), mailObject.getMessage());
-			 sender.send(mailObject);
+			 mail.send(mailObject);
+			//sender.send(mailObject);
 			System.out.println("######");
 			System.out.println(generate.jwtToken(userInformation.getUserId()));
 			return true;
@@ -96,20 +87,12 @@ public class ServiceImpl implements Services {
 	@Override
 	public UserInformation login(LoginInfo information) {
 		UserInformation user = repository.getUser(information.getEmail());
-		//UserInformation user=elasticrepo.findUser(information.getEmail());
+		// UserInformation user=elasticrepo.findUser(information.getEmail());
 		if (user != null) {
 			if ((user.getIsVerified() == 1) && (encryption.matches(information.getPassword(), user.getPassword()))) {
 				System.out.println(generate.jwtToken(user.getUserId()));
 				return user;
-//			} else {
-//				String mailResponse = response.fromMessage("http://localhost:8080/verify",
-//						generate.jwtToken(user.getUserId()));
-//				//MailServiceProvider.sendEmail(information.getEmail(), "verification", mailResponse);
-//				sender.send(mailResponse);
-//				return null;
-
 			}
-
 		}
 		return null;
 	}
@@ -136,10 +119,13 @@ public class ServiceImpl implements Services {
 			if (user.getIsVerified() == 1) {
 				String mailResposne = response.fromMessage("http://localhost:8080/verify",
 						generate.jwtToken(user.getUserId()));
-				 MailServiceProvider.sendEmail(user.getEmail(), "verification", mailResposne);
-				// sender.Send1(user.getEmail(), "verification", mailResposne);
+				mailObject.setEmail(user.getEmail());
+				mailObject.setSubject("verification");
+				mailObject.setMessage(mailResposne);
+				mail.send(mailObject);
+				// sender.Send(mailObject);
 				repository.save(user);
-				//elasticrepo.save(user);
+				// elasticrepo.save(user);
 				return true;
 			} else {
 				return false;
@@ -172,9 +158,9 @@ public class ServiceImpl implements Services {
 	@Override
 	public List<UserInformation> getUsers() {
 		List<UserInformation> users = repository.getUsers();
-		 UserInformation user = users.get(0);
+		UserInformation user = users.get(0);
 		return users;
-		//return (List<UserInformation>) elasticrepo.findAll();
+		// return (List<UserInformation>) elasticrepo.findAll();
 	}
 
 	@Transactional
@@ -184,9 +170,9 @@ public class ServiceImpl implements Services {
 			Long id = (Long) generate.parseJWT(token);
 
 			UserInformation user = repository.findUserById(id);
-		
-			//UserInformation user=elasticrepo.findUserById(id);
-			
+
+			// UserInformation user=elasticrepo.findUserById(id);
+
 			return user;
 		} catch (Exception e) {
 			throw new UserException("User doesn't exist ");

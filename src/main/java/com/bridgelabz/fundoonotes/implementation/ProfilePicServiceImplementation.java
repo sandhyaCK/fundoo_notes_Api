@@ -56,8 +56,8 @@ public class ProfilePicServiceImplementation implements ProfilePicService {
 			if (user != null) {
 				ProfilePic profile = new ProfilePic(fileName, user);
 				ObjectMetadata data = new ObjectMetadata();
-				data.setContentType(contentType);
-				data.setContentLength(file.getSize());
+			//	data.setContentType(contentType);
+				//data.setContentLength(file.getSize());
 
 				amazonS3.putObject(bucketName, fileName, file.getInputStream(), data);
 				repository.addProfile(profile);
@@ -83,8 +83,8 @@ public class ProfilePicServiceImplementation implements ProfilePicService {
 				deleteobjectFromS3Bucket(profile.getProfilePicName());
 				repository.delete(profile);
 				ObjectMetadata objectMetadata = new ObjectMetadata();
-				objectMetadata.setContentType(contentType);
-				objectMetadata.setContentLength(file.getSize());
+//				objectMetadata.setContentType(contentType);
+//				objectMetadata.setContentLength(file.getSize());
 
 				amazonS3.putObject(bucketName, originalFilename, file.getInputStream(), objectMetadata);
 				repository.addProfile(profile);

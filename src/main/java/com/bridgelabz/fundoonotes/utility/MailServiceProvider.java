@@ -1,54 +1,41 @@
 package com.bridgelabz.fundoonotes.utility;
 
-import java.util.Properties;
-
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
+import com.bridgelabz.fundoonotes.dto.DtoData;
+import com.bridgelabz.fundoonotes.exception.UserException;
+import com.bridgelabz.fundoonotes.response.MailObject;
+
 @Component
 public class MailServiceProvider {
+	String email = System.getenv("email");
+	String password = System.getenv("password");
+	
 	@Autowired
 	private JavaMailSender javaMailSender;
 
-	public static void sendEmail(String toEmail, String subject, String body) {
-
-		String fromEmail = System.getenv("email");
-		String password = System.getenv("password");
-		Properties prop = new Properties();
-		prop.put("mail.smtp.auth", "true");
-		prop.put("mail.smtp.starttls.enable", "true");
-		prop.put("mail.smtp.host", "smtp.gmail.com");
-		prop.put("mail.smtp.port", "587");
-		Authenticator auth = new Authenticator() {
-
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(fromEmail, password);
-			}
-
-		};
-		Session session = Session.getInstance(prop, auth);
-		send(session, fromEmail, toEmail, subject, body);
+	@Autowired
+	public MailServiceProvider(JavaMailSender javaMailSender) {
+		super();
+		this.javaMailSender = javaMailSender;
 	}
 
-	private static void send(Session session, String fromEmail, String toEmail, String subject, String body) {
+	public void send(MailObject mailObject) {
 		try {
-			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(fromEmail, "sandy"));
-			message.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
-			message.setSubject(subject);
-			message.setText(body);
-			Transport.send(message);
+
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+			mailMessage.setFrom(System.getenv(email));
+			mailMessage.setTo(mailObject.getEmail());
+			mailMessage.setSubject(mailObject.getSubject());
+			mailMessage.setText(mailObject.getMessage());
+
+			javaMailSender.send(mailMessage);
 		} catch (Exception e) {
-			System.out.println("exception occured while sending mail");
+			throw new UserException("error occured while sending mail");
 		}
 	}
+
 }

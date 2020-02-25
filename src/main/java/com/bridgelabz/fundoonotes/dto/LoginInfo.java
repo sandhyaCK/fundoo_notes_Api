@@ -1,12 +1,15 @@
 package com.bridgelabz.fundoonotes.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
+@Getter
+@Setter
 public class LoginInfo {
 String email;
 String password;
-
 public String getEmail() {
 	return email;
 }
