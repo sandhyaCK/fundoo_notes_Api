@@ -73,7 +73,7 @@ public class ServiceImpl implements Services {
 			mailObject.setEmail(information.getEmail());
 			mailObject.setMessage(mailResponse);
 			mailObject.setSubject("verified");
-			 ///mail.send(mailObject);
+			 mail.send(mailObject);
 			//sender.send(mailObject);
 			System.out.println("######");
 			System.out.println(generate.jwtToken(userInformation.getUserId()));
