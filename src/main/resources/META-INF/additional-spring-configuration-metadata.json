@@ -33,5 +33,10 @@
     "name": "javainuse.rabbitmq.exchange",
     "type": "java.lang.String",
     "description": "A description for 'javainuse.rabbitmq.exchange'"
+  },
+  {
+    "name": "bootstrap-servers",
+    "type": "java.lang.String",
+    "description": "A description for 'bootstrap-servers'"
   }
 ]}

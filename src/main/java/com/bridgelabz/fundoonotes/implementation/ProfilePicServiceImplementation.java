@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.implementation;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
@@ -29,7 +33,7 @@ public class ProfilePicServiceImplementation implements ProfilePicService {
 
 	private String acessKey = System.getenv("SecretAccessKey");
 
-	//private String awsRegion = System.getenv("region");
+	
 	
 	@PostConstruct
 	private void initializeAmazon() {
@@ -46,10 +50,10 @@ public class ProfilePicServiceImplementation implements ProfilePicService {
 	private UserRepository userRepo;
 
 	private String bucketName = System.getenv("BucketName");
-
+/*Method for uploading the profilepic for a user in s3 bucket*/
 	@Transactional
 	@Override
-	public ProfilePic uploadFileTos3Bucket(MultipartFile file, String fileName, String contentType, String token) {
+	public ProfilePic uploadFileTos3Bucket(MultipartFile file, String fileName,  String token) {
 		try {
 			Long id = (Long) generate.parseJWT(token);
 			UserInformation user = userRepo.findUserById(id);
@@ -70,7 +74,7 @@ public class ProfilePicServiceImplementation implements ProfilePicService {
 
 		return null;
 	}
-
+	/*Method for updating the profilepic for a user in s3 bucket*/
 	@Transactional
 	@Override
 	public ProfilePic updateProfile(MultipartFile file, String originalFilename, String contentType, String token) {
@@ -96,7 +100,7 @@ public class ProfilePicServiceImplementation implements ProfilePicService {
 		}
 		return null;
 	}
-
+	/*Method for deleting the profilepic for a user in s3 bucket*/
 	@Transactional
 	@Override
 	public void deleteobjectFromS3Bucket(String key) {

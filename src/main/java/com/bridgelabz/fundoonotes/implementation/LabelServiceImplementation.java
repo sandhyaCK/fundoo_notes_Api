@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.implementation;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -38,6 +42,7 @@ public class LabelServiceImplementation implements LabelService {
 	@Autowired
 	private UserRepository repository;
 
+	/* Method for creating the label */
 	@Override
 	@Transactional
 	public void createLabel(LabelDto labelDto, String token) {
@@ -62,6 +67,7 @@ public class LabelServiceImplementation implements LabelService {
 		}
 	}
 
+	/* Method for creating the label and mapped with labelEntity class */
 	@Transactional
 	@Override
 	public void createLabelAndMAp(LabelDto labelDto, String token) {
@@ -73,7 +79,7 @@ public class LabelServiceImplementation implements LabelService {
 		}
 		UserInformation user = Repository.findUserById(id);
 		if (user == null) {
-			BeanUtils.copyProperties(labelDto, LabelDto.class);
+			BeanUtils.copyProperties(labelDto, LabelData.class);
 
 			labelData.setUserId(user.getUserId());
 			LabelRepo.save(labelData);
@@ -86,6 +92,7 @@ public class LabelServiceImplementation implements LabelService {
 		}
 	}
 
+	/* Method for add the label */
 	@Transactional
 	@Override
 	public void addLabel(Long labelId, String token, Long noteId) {
@@ -95,6 +102,7 @@ public class LabelServiceImplementation implements LabelService {
 		LabelRepo.save(label);
 	}
 
+	/* Method for remove the label */
 	@Transactional
 	@Override
 	public void removeLabel(Long labelId, String token, Long noteId) {
@@ -104,6 +112,7 @@ public class LabelServiceImplementation implements LabelService {
 		LabelRepo.save(label);
 	}
 
+	/* Method for deleting the label */
 	@Transactional
 	@Override
 	public void deleteLabel(LabelUpdate label, String token) {
@@ -129,6 +138,7 @@ public class LabelServiceImplementation implements LabelService {
 		}
 	}
 
+	/* Method for edit the label */
 	@Transactional
 	@Override
 	public void edit(LabelUpdate label, String token) {
@@ -154,6 +164,7 @@ public class LabelServiceImplementation implements LabelService {
 		}
 	}
 
+	/* Method for list out all the label */
 	@Transactional
 	@Override
 	public List<LabelData> getAllLabels(String token) {
@@ -169,27 +180,41 @@ public class LabelServiceImplementation implements LabelService {
 		}
 	}
 
+	/* Method for list out all the label which having notes */
 	@Transactional
 	@Override
 	public List<NoteData> getNotes(String token, Long labelId) {
 		Long id = (Long) generate.parseJWT(token);
+		UserInformation user=repository.findUserById(id);
+		if(user!=null) {
 		LabelData label = LabelRepo.getLabel(labelId);
+		if(label!=null) {
+		List<NoteData> note = LabelRepo.getAllNotes(labelId);
 		// List<NoteData> list = label.getList();
-		return (List<NoteData>) label;
+		return (List<NoteData>) note;
+		}
+		}
+		return null;
 	}
-@Transactional
+
+	/* Method for get the single label of single user */
+	@Transactional
 	@Override
-	public List<LabelData> getLabel(String token) {
+	public LabelData getSingleLabel(String token, Long LabelId) {
 		Long id = null;
 		try {
 			id = (Long) generate.parseJWT(token);
+			UserInformation user = repository.findUserById(id);
+			if (user != null) {
+				LabelData data = LabelRepo.getLabel(LabelId);
 
+				return data;
+			}
 		} catch (Exception e) {
 			throw new UserException("user does not exist");
 
 		}
-		List<LabelData> labels = LabelRepo.getAllLabels(id);
-		return labels;
-	}
+		return null;
 
+	}
 }

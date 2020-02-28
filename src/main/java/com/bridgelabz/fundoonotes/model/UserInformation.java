@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.model;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,6 +26,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "User")
+/*Entity Class for User*/
 public class UserInformation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

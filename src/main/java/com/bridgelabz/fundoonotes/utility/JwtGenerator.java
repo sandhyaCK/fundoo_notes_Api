@@ -1,6 +1,10 @@
 
 package com.bridgelabz.fundoonotes.utility;
 
+/*
+ *  author : Sandhya
+ */
+
 import org.springframework.stereotype.Component;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -10,10 +14,11 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 public class JwtGenerator {
 	private static final String SECRET = "2129152050365";
 
-	public String jwtToken(long l) {
+	/* Method to generate the token for the particular userId */
+	public String jwtToken(long id) {
 		String token = null;
 		try {
-			token = JWT.create().withClaim("id", l).sign(Algorithm.HMAC512(SECRET));
+			token = JWT.create().withClaim("id", id).sign(Algorithm.HMAC512(SECRET));
 		} catch (IllegalArgumentException | JWTCreationException e) {
 
 			e.printStackTrace();
@@ -21,6 +26,7 @@ public class JwtGenerator {
 		return token;
 	}
 
+	/* Method to decode the token to id */
 	public Long parseJWT(String jwt) {
 		Long userId = (long) 0;
 		if (jwt != null) {

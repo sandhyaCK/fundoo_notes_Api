@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.dto;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +15,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
+/*Dto class for updating LabelData*/
 public class NoteUpdate {
 	@NotBlank
 	private Long id;

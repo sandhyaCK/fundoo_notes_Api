@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.repository;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -17,6 +21,7 @@ public class UserRepoImpl implements UserRepository {
 	@PersistenceContext
 	private EntityManager entityManger;
 
+	/* Query for save the data into userDatabase */
 	@Override
 	public UserInformation save(UserInformation information) {
 		Session session = entityManger.unwrap(Session.class);
@@ -24,6 +29,7 @@ public class UserRepoImpl implements UserRepository {
 		return information;
 	}
 
+	/* Query to find the user by id */
 	@Override
 	public UserInformation findUserById(Long id) {
 		Session session = entityManger.unwrap(Session.class);
@@ -32,6 +38,7 @@ public class UserRepoImpl implements UserRepository {
 		return (UserInformation) q.uniqueResult();
 	}
 
+	/* Query to get the usr information bby email */
 	@Override
 	public UserInformation getUser(String email) {
 		Session session = entityManger.unwrap(Session.class);
@@ -41,10 +48,12 @@ public class UserRepoImpl implements UserRepository {
 		return (UserInformation) q.uniqueResult();
 	}
 
+	/* Query to update the PasswordInformation */
 	@Override
 	public boolean update(PasswordUpdate information, Long id) {
 		Session session = entityManger.unwrap(Session.class);
-		Query<UserInformation> q = session.createQuery("update UserInformation set password=:p" + " " + " where id=:id");
+		Query<UserInformation> q = session
+				.createQuery("update UserInformation set password=:p" + " " + " where id=:id");
 		q.setParameter(" p", information.getConfirmPassword());
 		q.setParameter("id", id);
 		int status = q.executeUpdate();
@@ -55,10 +64,15 @@ public class UserRepoImpl implements UserRepository {
 		}
 	}
 
+	/*
+	 * Query to update the verify to TRUE once the token taken from the
+	 * RegisteredUser
+	 */
 	@Override
 	public boolean verify(Long id) {
 		Session session = entityManger.unwrap(Session.class);
-		Query<UserInformation> q = session.createQuery("update UserInformation set is_verified =:p" + " " + " " + " where user_id=:i");
+		Query<UserInformation> q = session
+				.createQuery("update UserInformation set is_verified =:p" + " " + " " + " where user_id=:i");
 		q.setParameter("p", true);
 		q.setParameter("i", id);
 		int status = q.executeUpdate();
@@ -71,10 +85,11 @@ public class UserRepoImpl implements UserRepository {
 
 	}
 
+	/* Query to list out all the User Information */
 	@Override
 	public List<UserInformation> getUsers() {
 		Session session = entityManger.unwrap(Session.class);
-		List<UserInformation> userList= session.createQuery("FROM UserInformation").getResultList();
+		List<UserInformation> userList = session.createQuery("FROM UserInformation").getResultList();
 		return userList;
 	}
 

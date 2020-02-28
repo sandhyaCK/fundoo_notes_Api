@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.implementation;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -7,6 +11,8 @@ import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,9 +50,14 @@ public class ServiceImpl implements Services {
 	private UserRepository repository;
 	@Autowired
 	private MailServiceProvider mail;
-	/*
-	 * @Autowired private RabbitMQSender sender;
-	 */
+	
+	@Autowired
+	private JavaMailSender javaMailSender;
+
+
+ @Autowired 
+ private RabbitMQSender sender;
+
 	/*
 	 * @Autowired private ElasticSearchRepo elasticrepo;
 	 */
@@ -54,34 +65,42 @@ public class ServiceImpl implements Services {
 	 * @Autowired public void setElasticSearchRepo(ElasticSearchRepo repo) {
 	 * this.elasticrepo = repo; }
 	 */
-
+ 
+	/* Method for user registration */
 	@Transactional
 	@Override
 	public Boolean register(DtoData information) {
 		System.out.println("######");
-		UserInformation user = repository.getUser( information.getEmail());
+		System.out.println("######");
+		UserInformation user = repository.getUser(information.getEmail());
 		if (user == null) {
 			userInformation = modelMapper.map(information, UserInformation.class);
 			userInformation.setDateTime(LocalDateTime.now());
 			String epassword = encryption.encode(information.getPassword());
-			userInformation.setPassword(epassword);
+			userInformation.setPassword(epassword);//
 			userInformation.setIsVerified(0);
-			repository.save(userInformation);
+		repository.save(userInformation);
 			// elasticrepo.save(userInformation);
-			String mailResponse = response.fromMessage("http://localhost:8081/verify",
+			String mailResponse =response.fromMessage("http://localhost:8080 verify",
 					generate.jwtToken(userInformation.getUserId()));
+			System.out.println("#----");
 			mailObject.setEmail(information.getEmail());
 			mailObject.setMessage(mailResponse);
-			mailObject.setSubject("verified");
-			 mail.send(mailObject);
+			//mailObject.setSubject("verified");
+			mail.sendMail(information.getEmail(),mailResponse);
+			
 			//sender.send(mailObject);
 			System.out.println("######");
 			System.out.println(generate.jwtToken(userInformation.getUserId()));
+		//	repository.save(userInformation);
 			return true;
 		}
 		throw new UserException("user already exist");
 
 	}
+	
+	
+	/* Method for user login */
 
 	@Transactional
 	@Override
@@ -101,6 +120,7 @@ public class ServiceImpl implements Services {
 		return generate.jwtToken(id);
 
 	}
+	/* Method for verifying the user */
 
 	@Transactional
 	@Override
@@ -110,6 +130,7 @@ public class ServiceImpl implements Services {
 		repository.verify(id);
 		return true;
 	}
+	/* Method to check whether the user is exist or not */
 
 	@Transactional
 	@Override
@@ -122,8 +143,8 @@ public class ServiceImpl implements Services {
 				mailObject.setEmail(user.getEmail());
 				mailObject.setSubject("verification");
 				mailObject.setMessage(mailResposne);
-				mail.send(mailObject);
-				// sender.Send(mailObject);
+				 //mail.send(mailObject);
+				//sender.send(mailObject);
 				repository.save(user);
 				// elasticrepo.save(user);
 				return true;
@@ -135,6 +156,7 @@ public class ServiceImpl implements Services {
 		}
 
 	}
+	/* Method for updating the user information */
 
 	@Transactional
 	@Override
@@ -153,6 +175,7 @@ public class ServiceImpl implements Services {
 		}
 
 	}
+	/* Method for list out all the userIformation */
 
 	@Transactional
 	@Override
@@ -163,6 +186,7 @@ public class ServiceImpl implements Services {
 		// return (List<UserInformation>) elasticrepo.findAll();
 	}
 
+	/* Method to get the single userInformation */
 	@Transactional
 	@Override
 	public UserInformation getSingleUser(String token) {

@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.service;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.util.List;
 
 import com.bridgelabz.fundoonotes.dto.LabelDto;
@@ -17,7 +21,7 @@ public interface LabelService {
  public void edit(LabelUpdate label,String token);
  public List<LabelData> getAllLabels(String token);
  public List<NoteData>  getNotes(String token,Long labelId);
-List<LabelData> getLabel(String token);
+public LabelData getSingleLabel(String token,Long LabelId);
 
 
 }

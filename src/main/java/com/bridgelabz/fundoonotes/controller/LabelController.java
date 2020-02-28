@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.controller;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +32,7 @@ public class LabelController {
 
 	/* API for creating label */
 	@PostMapping("/label/create/")
-	public ResponseEntity<Response> createLabel(@RequestBody LabelDto label,@RequestHeader("token") String token) {
+	public ResponseEntity<Response> createLabel(@RequestBody LabelDto label, @RequestHeader("token") String token) {
 		service.createLabel(label, token);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("label created ", 200, label));
 
@@ -71,7 +74,7 @@ public class LabelController {
 	}
 
 	/* API for deleting label */
-	@PostMapping("/label/delete")
+	@DeleteMapping("/label/delete")
 	public ResponseEntity<Response> deleteLabel(@RequestBody LabelUpdate label, @RequestHeader("token") String token) {
 		service.deleteLabel(label, token);
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("label deleted ", 200, label));
@@ -81,7 +84,7 @@ public class LabelController {
 	/* API for getting all label */
 	@GetMapping("/label/getlabels")
 	public ResponseEntity<Response> getLabels(@RequestHeader("token") String token) {
-		List<LabelData> labels = service.getLabel(token);
+		List<LabelData> labels = service.getAllLabels(token);
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("getting all labels  ", 200, labels));
 
 	}

@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.response;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.io.Serializable;
 
 import org.springframework.stereotype.Component;
@@ -7,6 +11,7 @@ import org.springframework.stereotype.Component;
 import lombok.Data;
 @Data
 @Component
+
 public class MailObject  implements Serializable{
 
 private static final long serialVersionUID = 1L;

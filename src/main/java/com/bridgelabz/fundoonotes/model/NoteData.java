@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.model;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 @Entity
 @Data
+/*Entity Class for Note*/
 public class NoteData {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

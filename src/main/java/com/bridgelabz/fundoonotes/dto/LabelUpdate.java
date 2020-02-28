@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.dto;
 
+/*
+ *  author : Sandhya
+ */
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +11,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
+/*Dto class for updating LabelData*/
 public class LabelUpdate {
 Long labelId;
 String name;

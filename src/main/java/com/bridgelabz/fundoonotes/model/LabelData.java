@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.model;
 
+/*
+ *  author : Sandhya
+ */
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,6 +21,7 @@ import lombok.Data;
 
 @Entity
 @Data
+/*Entity Class for Label*/
 public class LabelData {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

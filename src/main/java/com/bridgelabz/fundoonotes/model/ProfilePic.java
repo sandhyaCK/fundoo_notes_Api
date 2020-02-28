@@ -1,5 +1,9 @@
 package com.bridgelabz.fundoonotes.model;
 
+/*
+ *  author : Sandhya
+ */
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +17,7 @@ import lombok.Data;
 
 @Entity
 @Data
+/* Entity Class for profilePic */
 public class ProfilePic {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +26,11 @@ public class ProfilePic {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private UserInformation userLabel;                                                     
+	private UserInformation userLabel;
 
 	public ProfilePic(String fileName, UserInformation user) {
-		this.profilePicName= fileName;
-		this.userLabel=user;
+		this.profilePicName = fileName;
+		this.userLabel = user;
 	}
 
 	public Long getId() {
