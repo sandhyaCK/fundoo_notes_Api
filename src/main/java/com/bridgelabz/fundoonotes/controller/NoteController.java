@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.dto.NoteUpdate;
 import com.bridgelabz.fundoonotes.dto.ReminderDto;
+import com.bridgelabz.fundoonotes.implementation.ElasticSearchService;
 import com.bridgelabz.fundoonotes.model.NoteData;
 import com.bridgelabz.fundoonotes.response.Response;
 import com.bridgelabz.fundoonotes.service.NoteService;
@@ -30,11 +31,13 @@ import com.bridgelabz.fundoonotes.service.NoteService;
 public class NoteController {
 	@Autowired
 	private NoteService service;
-
+ @Autowired
+ private ElasticSearchService services;
 	/* API for creating a Note */
 	@PostMapping("/note/create")
 	public ResponseEntity<Response> create(@RequestBody NoteDto information, @RequestHeader("token") String token) {
 		service.createNote(information, token);
+		
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("note created", 200, information));
 	}
 

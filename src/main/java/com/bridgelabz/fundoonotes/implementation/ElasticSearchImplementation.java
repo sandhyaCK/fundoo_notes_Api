@@ -1,84 +1,75 @@
-/*
- * package com.bridgelabz.fundoonotes.implementation; import java.util.Map;
- * 
- * import org.apache.juli.logging.Log; import
- * org.elasticsearch.action.delete.DeleteRequest; import
- * org.elasticsearch.action.delete.DeleteResponse; import
- * org.elasticsearch.action.index.IndexRequest; import
- * org.elasticsearch.action.index.IndexResponse; import
- * org.elasticsearch.action.search.SearchRequest; import
- * org.elasticsearch.action.search.SearchResponse; import
- * org.elasticsearch.action.update.UpdateRequest; import
- * org.elasticsearch.action.update.UpdateResponse; import
- * org.elasticsearch.client.RequestOptions; import
- * org.elasticsearch.client.RestHighLevelClient; import
- * org.elasticsearch.common.xcontent.XContentType; import
- * org.elasticsearch.index.query.QueryBuilder; import
- * org.elasticsearch.index.query.QueryBuilders; import
- * org.elasticsearch.search.builder.SearchSourceBuilder; import
- * org.springframework.beans.factory.annotation.Autowired; import
- * org.springframework.stereotype.Service; import
- * com.fasterxml.jackson.databind.ObjectMapper; import
- * lombok.extern.slf4j.Slf4j; import org.slf4j.Logger; import
- * org.slf4j.LoggerFactory;
- * 
- * import com.amazonaws.services.directconnect.model.Lag; import
- * com.bridgelabz.fundoonotes.model.NoteData; import
- * com.bridgelabz.fundoonotes.service.ElasticSearchService;
- * 
- * public class ElasticSearchImplementation implements ElasticSearchService {
- * private static final String INDEX = "FundoonotesApi";
- * 
- * private static final String TYPE = "notes";
- * 
- * @Autowired private RestHighLevelClient restHighLevelClient;
- * 
- * @Autowired private ObjectMapper objectMapper;
- * 
- * 
- * @SuppressWarnings("rawtypes") public String createData(NoteData note) {
- * log.info("creating the notes into elastic search"); try { Long id =
- * note.getId(); String noteId = String.valueOf(id); Map getData =
- * objectMapper.convertValue(note, Map.class); IndexRequest indexRequest = new
- * IndexRequest(INDEX, TYPE, noteId).source(getData); IndexResponse respo =
- * restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT); return
- * respo.getResult().name(); } catch (Exception e) {
- * log.error("error occured while creating notes into elasticsearch" +
- * e.getMessage()); } return null; }
- * 
- * 
- * @SuppressWarnings("unchecked") public Map searchById(String id) {
- * log.info("searching notes by id from elast"); SearchRequest searchRequest =
- * new SearchRequest(); QueryBuilder queryBuilder =
- * QueryBuilders.matchQuery("noteId", id); SearchSourceBuilder sourceBuilder =
- * new SearchSourceBuilder(); sourceBuilder.query(queryBuilder);
- * searchRequest.source(sourceBuilder); SearchResponse searchResponse = null;
- * try { searchResponse = restHighLevelClient.search(searchRequest,
- * RequestOptions.DEFAULT); searchResponse.getHits().forEach(s ->
- * System.out.println(s.getSourceAsMap())); return
- * searchResponse.getHits().getAt(0).getSourceAsMap(); } catch (Exception e) {
- * log.error("error" + "[" + e.getMessage() + "]" +
- * "occured while searching the notes"); } return null; }
- * 
- * @Override public Map<String, Object> updateById(String id, NoteData notes) {
- * log.info("updating the notes in elastic search"); UpdateRequest updateRequest
- * = new UpdateRequest(INDEX, TYPE, id).fetchSource(true); try { String
- * getDataType = objectMapper.writeValueAsString(notes);
- * updateRequest.doc(getDataType, XContentType.JSON); UpdateResponse
- * updateResponse = restHighLevelClient.update(updateRequest,
- * RequestOptions.DEFAULT); return updateResponse.getGetResult().sourceAsMap();
- * } catch (Exception e) { log.error("error" + "[" + e.getMessage() + "]" +
- * "occured while updating the notes"); } return null; }
- * 
- * 
- * public void deleteById(String id) {
- * log.info("deleting notes by id in elasticSearch"); try { DeleteRequest
- * deleteRequest = new DeleteRequest(INDEX, TYPE, id); DeleteResponse
- * deleteResponse = restHighLevelClient.delete(deleteRequest,
- * RequestOptions.DEFAULT); log.info("deleting response in elastic search " +
- * deleteResponse); } catch (Exception e) {
- * log.error("error occured while deleting file" + e.getMessage()); } }
- * 
- * 
- * }
- */
+
+package com.bridgelabz.fundoonotes.implementation;
+
+import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.bridgelabz.fundoonotes.configuration.ElasticSearchConfiguration;
+import com.bridgelabz.fundoonotes.model.NoteData;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
+public class ElasticSearchImplementation implements ElasticSearchService {
+	@Autowired
+	private ObjectMapper objectMapper;
+	@Autowired
+	private ElasticSearchConfiguration  config;
+	private String INDEX;
+	private String TYPE;
+	@Override
+	public String createNote(NoteData note)
+	{
+
+		Map<String, Object> dataMapper = objectMapper.convertValue(note, Map.class);
+		IndexRequest indexRequest = new IndexRequest(INDEX, TYPE, String.valueOf(note.getId())).source(dataMapper);
+		IndexResponse indexResponse = null;
+		try {
+			indexResponse = config.client().index(indexRequest, RequestOptions.DEFAULT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return indexResponse.getResult().name();
+	}
+
+	@Override
+	public List<NoteData> searchByTitle(String title) {
+		SearchRequest searchRequest = new SearchRequest("springboot");
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+		sourceBuilder.query(QueryBuilders.matchQuery("title", title));
+		searchRequest.source(sourceBuilder);
+		SearchResponse searchresponse = null;
+		try {
+			searchresponse = config.client().search(searchRequest, RequestOptions.DEFAULT);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(getSearchResult(searchresponse).toString());
+		return getSearchResult(searchresponse);
+	}
+
+	private List<NoteData> getSearchResult(SearchResponse searchresponse) {
+		SearchHit[] searchhits = searchresponse.getHits().getHits();
+		List<NoteData> notes = new ArrayList<>();
+		if (searchhits.length > 0) {
+			Arrays.stream(searchhits)
+					.forEach(hit -> notes.add(objectMapper.convertValue(hit.getSourceAsMap(), NoteData.class)));
+		}
+		return notes;
+	}
+
+}
