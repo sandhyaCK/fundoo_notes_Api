@@ -56,7 +56,7 @@ public class NoteServiceImplementation implements NoteService {
 				noteData.setTitle(information.getTitle());
 				noteData.setUpDateAndTime(null);
 				userData.getNote().add(noteData);
-				NoteData data = noterepo.save(noteData);
+			    noterepo.save(noteData);
 				// if (data != null) {
 				// final String key = userData.getEmail();
 				// }
@@ -119,7 +119,7 @@ public class NoteServiceImplementation implements NoteService {
 			if (noteData != null) {
 				noteData.setPinned(0);
 				noteData.setArchieved(1);
-				noteData.setUpDateAndTime(LocalDateTime.now());
+				//noteData.setUpDateAndTime(LocalDateTime.now());
 				noterepo.save(noteData);
 			}
 		} catch (Exception e) {
@@ -270,13 +270,17 @@ public class NoteServiceImplementation implements NoteService {
 
 		try {
 			Long userid = (Long) generate.parseJWT(token);
+			
 			userData = repository.findUserById(userid);
+			if(userData!=null) {
 			NoteData noteData = noterepo.findById(id);
 			if (noteData != null) {
 				noteData.setReminder(reminder.getRemainder());
+				
 				noterepo.save(noteData);
+				System.out.println("*******");
 			}
-		} catch (Exception e) {
+		}} catch (Exception e) {
 			throw new UserException("user is not present");
 		}
 

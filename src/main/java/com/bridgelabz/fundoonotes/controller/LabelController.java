@@ -40,8 +40,7 @@ public class LabelController {
 
 	/* API for creating and map label */
 	@PostMapping("/label/createandmap")
-	public ResponseEntity<Response> createandmapLabel(@RequestBody LabelDto label, @RequestHeader("token") String token,
-			@RequestParam("noteId") Long noteId) {
+	public ResponseEntity<Response> createandmapLabel(@RequestBody LabelDto label, @RequestHeader("token") String token) {
 		service.createLabelAndMAp(label, token);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("label created ", 200, label));
 

@@ -31,7 +31,7 @@ public class ProfilePic {
 	public ProfilePic(String fileName, UserInformation user) {
 		this.profilePicName = fileName;
 		this.userLabel = user;
-	}
+	  }
 
 	public Long getId() {
 		return id;

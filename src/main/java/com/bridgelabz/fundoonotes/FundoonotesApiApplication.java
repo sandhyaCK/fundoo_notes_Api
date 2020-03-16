@@ -16,7 +16,7 @@ public class FundoonotesApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FundoonotesApiApplication.class, args);
-		System.out.println("$$$$$");
+		System.out.println("$$$$$$");
 	}
 
 }

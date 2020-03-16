@@ -48,7 +48,7 @@ public class ElasticSearchImplementation implements ElasticSearchService {
 
 	@Override
 	public List<NoteData> searchByTitle(String title) {
-		SearchRequest searchRequest = new SearchRequest("springboot");
+		SearchRequest searchRequest = new SearchRequest("fundoonotes");
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 		sourceBuilder.query(QueryBuilders.matchQuery("title", title));
 		searchRequest.source(sourceBuilder);

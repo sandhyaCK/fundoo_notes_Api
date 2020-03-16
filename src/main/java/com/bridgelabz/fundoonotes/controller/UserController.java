@@ -100,7 +100,7 @@ public class UserController {
 
 	/* API for retrieving the all the user information */
 	@GetMapping("user/allUsers")
-	public ResponseEntity<Response> getAllUsers(@RequestBody UserInformation user) {
+	public ResponseEntity<Response> getAllUsers() {
 		List<UserInformation> users = service.getUsers();
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("Listed all user information", 200, users));
 	}

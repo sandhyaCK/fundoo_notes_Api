@@ -118,7 +118,7 @@ public class NoteController {
 	public ResponseEntity<Response> addRemainder(@RequestHeader("token") String token,
 			@RequestParam("noteId") Long noteId, @RequestBody ReminderDto remainder) {
 		service.addReminder(noteId, token, remainder);
-		return ResponseEntity.status(HttpStatus.OK).body(new Response(" reminderAdded notes", 200));
+		return ResponseEntity.status(HttpStatus.OK).body(new Response(" reminderAdded notes", 200,remainder));
 	}
 
 	/* API for removing remainder Notes */
