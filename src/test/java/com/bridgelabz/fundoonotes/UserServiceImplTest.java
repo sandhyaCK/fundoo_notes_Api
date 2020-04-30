@@ -78,15 +78,19 @@ public class UserServiceImplTest {
         response.forEach(System.out::println);
     }
     @Test
-    public  void testGetUserById() {
-
-        user.setUserId(1);
-        user.setName("Sandhya");
+    public  void testGetUserById() throws Exception {
+        user.setUserId(3L);
+        user.setName("sandy");
         user.setEmail("csandhyait@gmail.com");
-        user.setPassword("sandhya");
-        Mockito.when(repository.findUserById(1)).thenReturn(user);
+        String epassword = encryption.encode("sandy");
+        user.setPassword(epassword);
+        user.setMobileNumber("8087968379");
+        user.setIsVerified(0);
+        user.setDateTime(LocalDateTime.of(2020, Month.APRIL, 30, 14, 44, 9));
+        Mockito.when(repository.findUserById(3L)).thenReturn(user);
+        assertThat(userServiceImpl.getSingleUser("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpZCI6M30.J7bbcxYxFXsWCWRY3DMIuSAFZ_PwgmvlOShtZh5ew2UEOFwiSnfIyon0sUYuZx5RO1VVwHvFFOhEfl5a-daIOA")).isEqualTo(user);
     }
-   // @Test
+        // @Test
     public  void testLogin() {
         LoginInfo login=new LoginInfo();
         login.setEmail("csandhyait@gmail.com");
