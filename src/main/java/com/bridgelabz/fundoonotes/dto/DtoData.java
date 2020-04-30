@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Data
-@Component
+
 @Getter
 @Setter
 @AllArgsConstructor

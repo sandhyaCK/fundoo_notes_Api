@@ -50,12 +50,12 @@ public class ServiceImpl implements Services {
 	private UserRepository repository;
 	@Autowired
 	private MailServiceProvider mail;
-	
+
 	@Autowired
 	private JavaMailSender javaMailSender;
 
 
- @Autowired 
+ @Autowired
  private RabbitMQSender sender;
 
 	/*
@@ -81,14 +81,14 @@ public class ServiceImpl implements Services {
 			userInformation.setIsVerified(0);
 		    repository.save(userInformation);
 			// elasticrepo.save(userInformation);
-			String mailResponse =response.fromMessage("http://localhost:8080 verify",
-					generate.jwtToken(userInformation.getUserId()));
-			System.out.println("#----");
-			mailObject.setEmail(information.getEmail());
-			mailObject.setMessage(mailResponse);
-			//mailObject.setSubject("verified");
-			mail.sendMail(information.getEmail(),mailResponse);
-			 
+//			String mailResponse =response.fromMessage("http://localhost:8080 verify",
+//					generate.jwtToken(userInformation.getUserId()));
+//			System.out.println("#----");
+//			mailObject.setEmail(information.getEmail());
+//			mailObject.setMessage(mailResponse);
+//			//mailObject.setSubject("verified");
+//			mail.sendMail(information.getEmail(),mailResponse);
+//
 			//sender.send(mailObject);
 			System.out.println("######");
 			System.out.println(generate.jwtToken(userInformation.getUserId()));
