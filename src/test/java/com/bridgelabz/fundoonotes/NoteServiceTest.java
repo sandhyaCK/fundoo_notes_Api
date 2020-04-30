@@ -18,7 +18,7 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class NotesServiceTest {
-    @Mock
+   @Mock
     private NoteRepository noteRepo;
     @Mock
     private UserRepository repo;
