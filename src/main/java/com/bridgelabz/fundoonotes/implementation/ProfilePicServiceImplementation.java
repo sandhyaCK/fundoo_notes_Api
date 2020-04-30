@@ -26,7 +26,7 @@ import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.service.ProfilePicService;
 import com.bridgelabz.fundoonotes.utility.JwtGenerator;
 
-@Service
+//@Service
 public class ProfilePicServiceImplementation implements ProfilePicService {
 
 	private String awsKeyId = System.getenv("AccessKeyId");
