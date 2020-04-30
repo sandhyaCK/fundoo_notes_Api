@@ -36,11 +36,4 @@ public class LabelServiceTest {
         label.setLabelId(1);
         Mockito.when(labelRepo.save()).thenReturn(label);
     }
-//    @Test
-//    public void addLabelTest(){
-//        user.setUserId(1);
-//        Mockito.when(repo.findUserById(1)).then(user);
-//        note.setId(1);
-//        Mockito.when(noteRepo.findById(1));
-//        label.setList(List<NoteData>);
 }
