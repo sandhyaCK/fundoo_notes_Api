@@ -51,7 +51,7 @@ public class ProfilePicServiceImplementation implements ProfilePicService {
 
 	private String bucketName = System.getenv("BucketName");
 /*Method for uploading the profilepic for a user in s3 bucket*/
-	@Transactional
+	//@Transactional
 	@Override
 	public ProfilePic uploadFileTos3Bucket(MultipartFile file, String fileName,  String token) {
 		try {
