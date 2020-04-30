@@ -74,7 +74,7 @@ public class NotesServiceTest {
     }
 
     @Test
-    public void deleteNote(){
+    public void deleteNoteTest(){
         user.setUserId(1);
         Mockito.when(repo.findUserById(1)).then(user);
         note.setId(1);
@@ -130,5 +130,14 @@ public class NotesServiceTest {
         Mockito.when(noteRepo.getPinnededNotes()).thenReturn(notes);
         List<UserInformation> response = service.getPinneded();
         response.forEach(System.out::println);
+    }
+    @Test
+    public void addReminderTest(){
+        user.setUserId(1);
+        Mockito.when(repo.findUserById(1)).then(user);
+        note.setId(1);
+        Mockito.when(noteRepo.findById(1));
+        note.setReminder(01-05-2020 10:00:00));
+
     }
 }
