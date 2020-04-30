@@ -70,7 +70,7 @@ public class NotesServiceTest {
         note.setId(1);
         Mockito.when(noteRepo.findById(1));
         note.setColour("blue");
-        Mockito.when(noteRepo.updateColor(1,1,"blue");
+        Mockito.when(noteRepo.updateColor(1,1,"blue"));
     }
 
     @Test
@@ -110,5 +110,25 @@ public class NotesServiceTest {
         note.setArchieved(0);
         note.setTrashed(1);
         Mockito.when(noteRepo.save()).thenReturn(note);
+    }
+    @Test
+    public void GetArchievedNotesTest() throws Exception {
+        user.setUserId(1);
+        Mockito.when(repo.findUserById(1)).then(user);
+        List<NoteData> notes = new ArrayList<>();
+        notes.add(createNoteTest());
+        Mockito.when(noteRepo.getArchievedNotes()).thenReturn(notes);
+        List<UserInformation> response = service.getarchieved();
+        response.forEach(System.out::println);
+    }
+    @Test
+    public void GetPinnedNotes() throws Exception {
+        user.setUserId(1);
+        Mockito.when(repo.findUserById(1)).then(user);
+        List<NoteData> notes = new ArrayList<>();
+        notes.add(createNoteTest());
+        Mockito.when(noteRepo.getPinnededNotes()).thenReturn(notes);
+        List<UserInformation> response = service.getPinneded();
+        response.forEach(System.out::println);
     }
 }
