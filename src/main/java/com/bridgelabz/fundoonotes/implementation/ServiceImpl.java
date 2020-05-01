@@ -55,8 +55,8 @@ public class ServiceImpl implements Services {
 	private JavaMailSender javaMailSender;
 
 
- @Autowired
- private RabbitMQSender sender;
+	@Autowired
+	private RabbitMQSender sender;
 
 	/*
 	 * @Autowired private ElasticSearchRepo elasticrepo;
@@ -65,7 +65,7 @@ public class ServiceImpl implements Services {
 	 * @Autowired public void setElasticSearchRepo(ElasticSearchRepo repo) {
 	 * this.elasticrepo = repo; }
 	 */
- 
+
 	/* Method for user registration */
 	@Transactional
 	@Override
@@ -79,27 +79,27 @@ public class ServiceImpl implements Services {
 			String epassword = encryption.encode(information.getPassword());
 			userInformation.setPassword(epassword);//
 			userInformation.setIsVerified(0);
-		    repository.save(userInformation);
+			repository.save(userInformation);
 			// elasticrepo.save(userInformation);
-//			String mailResponse =response.fromMessage("http://localhost:8080 verify",
-//					generate.jwtToken(userInformation.getUserId()));
-//			System.out.println("#----");
-//			mailObject.setEmail(information.getEmail());
-//			mailObject.setMessage(mailResponse);
-//			//mailObject.setSubject("verified");
-//			mail.sendMail(information.getEmail(),mailResponse);
-//
+			String mailResponse = response.fromMessage("http://localhost:8080 verify",
+					generate.jwtToken(userInformation.getUserId()));
+			System.out.println("#----");
+			mailObject.setEmail(information.getEmail());
+			mailObject.setMessage(mailResponse);
+			//mailObject.setSubject("verified");
+			mail.sendMail(information.getEmail(), mailResponse);
+
 			//sender.send(mailObject);
 			System.out.println("######");
 			System.out.println(generate.jwtToken(userInformation.getUserId()));
-		//	repository.save(userInformation);
+			//	repository.save(userInformation);
 			return true;
 		}
 		throw new UserException("user already exist");
 
 	}
-	
-	
+
+
 	/* Method for user login */
 
 	@Transactional
@@ -143,7 +143,7 @@ public class ServiceImpl implements Services {
 				mailObject.setEmail(user.getEmail());
 				mailObject.setSubject("verification");
 				mailObject.setMessage(mailResposne);
-				 //mail.send(mailObject);
+				//mail.send(mailObject);
 				//sender.send(mailObject);
 				repository.save(user);
 				// elasticrepo.save(user);
@@ -194,6 +194,22 @@ public class ServiceImpl implements Services {
 			Long id = (Long) generate.parseJWT(token);
 
 			UserInformation user = repository.findUserById(id);
+
+			// UserInformation user=elasticrepo.findUserById(id);
+
+			return user;
+		} catch (Exception e) {
+			throw new UserException("User doesn't exist ");
+		}
+	}
+
+	@Transactional
+	@Override
+	public UserInformation getSingleUseByEmailr(String email) {
+		try {
+			Long id = (Long) generate.parseJWT(email);
+
+			UserInformation user = repository.getUser(email);
 
 			// UserInformation user=elasticrepo.findUserById(id);
 

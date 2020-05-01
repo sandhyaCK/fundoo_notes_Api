@@ -23,7 +23,7 @@ public class DtoData {
 	private String password;
 	private String mobileNumber;
 
-	public String getName() {
+	public String getName()  {
 		return name;
 	}
 

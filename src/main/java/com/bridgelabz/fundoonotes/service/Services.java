@@ -24,5 +24,5 @@ public interface Services {
 	List<UserInformation> getUsers();
 
 	UserInformation getSingleUser(String token) throws Exception;
-
+	public UserInformation getSingleUseByEmailr(String email);
 }

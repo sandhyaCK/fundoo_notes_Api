@@ -8,37 +8,36 @@
 //import com.bridgelabz.fundoonotes.service.NoteService;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
+//import org.junit.runner.RunWith;
 //import org.mockito.Mock;
 //import org.mockito.Mockito;
+//import org.mockito.junit.MockitoJUnitRunner;
 //import org.mockito.junit.jupiter.MockitoExtension;
+//import org.springframework.boot.test.context.SpringBootTest;
 //
 //import java.time.LocalDateTime;
 //import java.util.ArrayList;
 //import java.util.List;
 //
 //@ExtendWith(MockitoExtension.class)
+//@SpringBootTest
+//@RunWith(MockitoJUnitRunner.class)
+//
 //public class NotesServiceTest {
 //   @Mock
-//    private NoteRepository noteRepo;
+//    private NoteService service;
 //    @Mock
 //    private UserRepository repo;
 //    NoteData note =new NoteData();
 //    UserInformation user=new UserInformation();
-//    NoteService service=new NoteServiceImplementation();
+//
 //
 //    @Test
 //    public void createNoteTest(){
-//        user.setUserId(1);
-//        Mockito.when(repo.findUserById(1)).then(user);
-//        note.setArchieved(0);
-//        note.setColour("red");
+//
 //        note.setDescription("welcome");
-//        note.setId(1);
-//        note.setCreatedDateAndTime(LocalDateTime.now());
-//        note.setPinned(0);
 //        note.setTitle("hello");
-//        note.setTrashed(0);
-//        Mockito.when(noteRepo.save(note)).thenReturn(note);
+//        Mockito.when(service.createNote()).thenReturn(note);
 //    }
 //    @Test
 //    public void testGetNotes() throws Exception {
@@ -72,7 +71,7 @@
 //        note.setColour("blue");
 //        Mockito.when(noteRepo.updateColor(1,1,"blue"));
 //    }
-//
+
 //    @Test
 //    public void deleteNoteTest(){
 //        user.setUserId(1);
@@ -140,4 +139,4 @@
 //        note.setReminder(01-05-2020 10:00:00));
 //
 //    }
-//}
+

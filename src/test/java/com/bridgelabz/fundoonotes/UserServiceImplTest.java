@@ -7,11 +7,14 @@ import com.bridgelabz.fundoonotes.model.UserInformation;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIOException;
 import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_DATE_TIME;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 import com.bridgelabz.fundoonotes.service.Services;
+import com.bridgelabz.fundoonotes.utility.JwtGenerator;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -28,6 +31,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.ws.soap.Addressing;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -38,90 +42,73 @@ import java.util.List;
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
-
 public class UserServiceImplTest {
-
-    @MockBean
-    private UserRepository repository;
     @Mock
-    ModelMapper modelMapper;
+    DtoData user1;
     @Mock
-    private BCryptPasswordEncoder encryption;
-@MockBean
-        DtoData user1;
-    Services userServiceImpl = new ServiceImpl();
+    Services userServiceImpl;
     UserInformation user = new UserInformation();
-
+    @Mock
+    JwtGenerator generator;
+    String token=null;
     @Test
     public void createUserInformation() throws Exception {
         user1.setEmail("csandhyait@gmail.com");
         user1.setName("sandy");
-        String epassword=encryption.encode("sandy");
-        user1.setPassword(epassword);
+        user1.setPassword("sandy");
         user1.setMobileNumber("8087968379");
-        user = modelMapper.map(user1, UserInformation.class);
-        user.setIsVerified(0);
-
-        user.setDateTime(LocalDateTime.of(2020, Month.APRIL, 30, 14, 44, 9));
-        user.setPassword(epassword);
-        user.setUserId(3L);
-        Mockito.when(repository.save(user)).thenReturn(user);
-        assertThat(userServiceImpl.getSingleUser("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpZCI6M30.J7bbcxYxFXsWCWRY3DMIuSAFZ_PwgmvlOShtZh5ew2UEOFwiSnfIyon0sUYuZx5RO1VVwHvFFOhEfl5a-daIOA")).isEqualTo(user);
+        Mockito.when(userServiceImpl.register(user1)).thenReturn(true);
+        assertThat(user);
     }
-
+    @Test
+    public  void testLogin() throws Exception {
+        LoginInfo login=new LoginInfo();
+        login.setEmail("csandhyait@gmail.com");
+        login.setPassword("sandy");
+        System.out.println("#####");
+        Mockito.when(userServiceImpl.isUserExist("csandhyait@gmail.com")).thenReturn(true);
+        System.out.println("#####");
+        assertThat(user).isNotNull();
+    }
     @Test
     public void testGetUsers() throws Exception {
         List<UserInformation> users=new ArrayList<>();
-        users.add(createUserInformation());
-        Mockito.when(repository.getUsers()).thenReturn(users);
+        Mockito.when( userServiceImpl.getUsers()).thenReturn(users);
         List<UserInformation> response= userServiceImpl.getUsers();
-        response.forEach(System.out::println);
+       assertThat(users).isNotNull();
     }
+
     @Test
     public  void testGetUserById() throws Exception {
         user.setUserId(3L);
-        user.setName("sandy");
-        user.setEmail("csandhyait@gmail.com");
-        String epassword = encryption.encode("sandy");
-        user.setPassword(epassword);
-        user.setMobileNumber("8087968379");
-        user.setIsVerified(0);
-        user.setDateTime(LocalDateTime.of(2020, Month.APRIL, 30, 14, 44, 9));
-        Mockito.when(repository.findUserById(3L)).thenReturn(user);
-        assertThat(userServiceImpl.getSingleUser("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpZCI6M30.J7bbcxYxFXsWCWRY3DMIuSAFZ_PwgmvlOShtZh5ew2UEOFwiSnfIyon0sUYuZx5RO1VVwHvFFOhEfl5a-daIOA")).isEqualTo(user);
+        Mockito.when(generator.jwtToken(3L)).thenReturn(token);
+        Mockito.when(userServiceImpl.getSingleUser(token)).thenReturn(user);
+        assertThat(user).isNotNull();
     }
-        // @Test
-    public  void testLogin() {
-        LoginInfo login=new LoginInfo();
-        login.setEmail("csandhyait@gmail.com");
-        String epassword=encryption.encode("sandy");
-        login.setPassword(epassword);
-        user = modelMapper.map(user1, UserInformation.class);
-        user.setIsVerified(1);
-        user.setUserId(3L);
-        user.setName("sandy");
-        user.setDateTime(LocalDateTime.of(2020, Month.APRIL, 30, 14, 44, 9));
-       user.setMobileNumber("8087968379");
-        Mockito.when(repository.save(user)).thenReturn(user);
-        assertThat(userServiceImpl.getSingleUser("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpZCI6M30.J7bbcxYxFXsWCWRY3DMIuSAFZ_PwgmvlOShtZh5ew2UEOFwiSnfIyon0sUYuZx5RO1VVwHvFFOhEfl5a-daIOA")).isEqualTo(user);
-    }    }
-    @Test
-    public void testUpdate(){
-        user.setUserId(1);
-        Mockito.when(repository.findUserById(1)).thenReturn(user);
-        user.setPassword("samdy");
-        Mockito.when(repository.update("sandy",1)).thenReturn(1);
 
-    }
+
     @Test
     public void testVerify(){
-        user.setUserId(2);
-        Mockito.when(repository.verify(1)).thenReturn(true);
+        user.setUserId(3L);
+        Mockito.when(generator.jwtToken(3L)).thenReturn(token);
+        Mockito.when(userServiceImpl.verify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpZCI6M30.J7bbcxYxFXsWCWRY3DMIuSAFZ_PwgmvlOShtZh5ew2UEOFwiSnfIyon0sUYuZx5RO1VVwHvFFOhEfl5a-daIOA")).thenReturn(true);
+  assertThat(token).isNotNull();
     }
 
 }
 
-}
+//   @Test
+//    public void testUpdate(){
+//        user.setUserId(1);
+//        Mockito.when(repository.findUserById(1)).thenReturn(user);
+//      user.setPassword("samdy");
+//        Mockito.when(repository.update("sandy",1)).thenReturn(1);
+//
+//   }
+
+
+
+
 
 
 

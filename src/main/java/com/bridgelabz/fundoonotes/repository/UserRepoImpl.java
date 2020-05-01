@@ -41,6 +41,7 @@ public class UserRepoImpl implements UserRepository {
 	/* Query to get the usr information bby email */
 	@Override
 	public UserInformation getUser(String email) {
+		System.out.println("$$$$$$$");
 		Session session = entityManger.unwrap(Session.class);
 		Query<UserInformation> q = session.createQuery("FROM UserInformation where email=:email");
 		q.setParameter("email", email);
@@ -52,8 +53,7 @@ public class UserRepoImpl implements UserRepository {
 	@Override
 	public boolean update(PasswordUpdate information, Long id) {
 		Session session = entityManger.unwrap(Session.class);
-		Query<UserInformation> q = session
-				.createQuery("update UserInformation set password=:p" + " " + " where id=:id");
+		Query<UserInformation> q = session.createQuery("update UserInformation set password=:p" + " " + " where id=:id");
 		q.setParameter(" p", information.getConfirmPassword());
 		q.setParameter("id", id);
 		int status = q.executeUpdate();

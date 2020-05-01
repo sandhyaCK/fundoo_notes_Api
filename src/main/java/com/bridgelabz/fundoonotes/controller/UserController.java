@@ -111,5 +111,10 @@ public class UserController {
 		UserInformation user = service.getSingleUser(token);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("User is", 200, user));
 	}
+	@GetMapping("user/singleUserByEmail")
+	public ResponseEntity<Response> singleUserByEmail(@RequestHeader("email") String email) throws Exception {
+		UserInformation user = service.getSingleUseByEmailr(email);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("User is", 200, user));
+	}
 
 }
